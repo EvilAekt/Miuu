@@ -6,11 +6,12 @@ export function renderDashboardHtml(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#6366f1">
+  <meta name="theme-color" content="#ffa6c9">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="/manifest.json">
-  <title>Discord Music Bot — Next-Gen Audio Dashboard</title>
+  <link rel="icon" type="image/jpeg" href="/assets/miu_avatar.jpg">
+  <title>🌸 Miu Music — Kawaii Studio Dashboard</title>
   
   <!-- Premium Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,6 +20,27 @@ export function renderDashboardHtml(): string {
 
   <style>
     :root {
+      --bg-dark: #120914;
+      --card-bg: rgba(28, 14, 32, 0.72);
+      --card-border: rgba(255, 166, 201, 0.18);
+      --card-hover-border: rgba(255, 141, 178, 0.55);
+      --primary: #ffa6c9;
+      --primary-hover: #ff85ab;
+      --primary-glow: rgba(255, 166, 201, 0.45);
+      --accent: #ffd1dc;
+      --accent-glow: rgba(255, 209, 220, 0.4);
+      --text-main: #fff0f5;
+      --text-muted: #d8b4c8;
+      --text-dim: #99788f;
+      --success: #77dd77;
+      --warning: #fbcfe8;
+      --error: #ff6b81;
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body.theme-cosmic {
       --bg-dark: #080c16;
       --card-bg: rgba(15, 23, 42, 0.65);
       --card-border: rgba(255, 255, 255, 0.08);
@@ -31,12 +53,6 @@ export function renderDashboardHtml(): string {
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --error: #ef4444;
-      --font-display: 'Outfit', sans-serif;
-      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
     }
 
     body.theme-oled {
@@ -104,7 +120,7 @@ export function renderDashboardHtml(): string {
       position: absolute;
       border-radius: 50%;
       filter: blur(100px);
-      opacity: 0.25;
+      opacity: 0.28;
       animation: floatOrb 18s ease-in-out infinite alternate;
     }
     .orb-1 {
@@ -115,14 +131,14 @@ export function renderDashboardHtml(): string {
     .orb-2 {
       width: 450px; height: 450px;
       bottom: -150px; right: -100px;
-      background: var(--accent);
+      background: #e0b0ff;
       animation-duration: 22s;
     }
     .orb-3 {
       width: 350px; height: 350px;
       top: 40%; left: 60%;
-      background: #8b5cf6;
-      opacity: 0.15;
+      background: #ff85a2;
+      opacity: 0.20;
       animation-duration: 26s;
     }
     @keyframes floatOrb {
@@ -161,15 +177,30 @@ export function renderDashboardHtml(): string {
       font-size: 1.25rem;
       letter-spacing: -0.02em;
     }
-    .brand-icon {
-      width: 38px;
-      height: 38px;
+    .brand-avatar-box {
+      width: 40px;
+      height: 40px;
       border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      overflow: hidden;
+      border: 2px solid var(--primary);
+      box-shadow: 0 0 14px var(--primary-glow);
+      flex-shrink: 0;
+      background: #1e1122;
+    }
+    .brand-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #fff;
       display: flex;
       align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 15px var(--primary-glow);
+      gap: 0.35rem;
     }
     .brand-sub {
       font-size: 0.72rem;
@@ -177,6 +208,66 @@ export function renderDashboardHtml(): string {
       color: var(--text-muted);
       letter-spacing: 0.05em;
       text-transform: uppercase;
+    }
+
+    /* Miu Kawaii Hero Banner */
+    .miu-hero-banner {
+      position: relative;
+      width: 100%;
+      height: 140px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+      margin-bottom: 0.5rem;
+    }
+    .miu-hero-banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+      transition: transform 0.6s ease;
+      display: block;
+    }
+    .miu-hero-banner:hover .miu-hero-banner-img {
+      transform: scale(1.03);
+    }
+    .miu-hero-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(18, 9, 20, 0.90) 0%, rgba(18, 9, 20, 0.50) 55%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1.5rem 2rem;
+      gap: 0.4rem;
+    }
+    .miu-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255, 166, 201, 0.22);
+      border: 1px solid rgba(255, 166, 201, 0.45);
+      color: #ffccd9;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      width: fit-content;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .miu-hero-quote {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #fff0f5;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+    @media (max-width: 680px) {
+      .miu-hero-banner { height: 110px; }
+      .miu-hero-banner-overlay { padding: 1rem 1.25rem; }
+      .miu-hero-quote { font-size: 0.85rem; }
     }
 
     /* Top Search / Quick Play Bar */
@@ -1020,16 +1111,12 @@ export function renderDashboardHtml(): string {
   <!-- Header -->
   <header>
     <div class="brand">
-      <div class="brand-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 18V5l12-2v13"></path>
-          <circle cx="6" cy="18" r="3"></circle>
-          <circle cx="18" cy="16" r="3"></circle>
-        </svg>
+      <div class="brand-avatar-box">
+        <img src="/assets/miu_avatar.jpg" class="brand-avatar-img" alt="Miu" />
       </div>
       <div>
-        <div>Miu Music</div>
-        <div class="brand-sub">Studio Dashboard</div>
+        <div class="brand-title">Miu Music 🌸</div>
+        <div class="brand-sub">Kawaii Studio 🎀</div>
       </div>
     </div>
 
@@ -1063,7 +1150,8 @@ export function renderDashboardHtml(): string {
       </button>
 
       <select id="themeSelector" class="theme-select">
-        <option value="default">Modern Cosmic</option>
+        <option value="default">🌸 Miu Kawaii Pink</option>
+        <option value="cosmic">Modern Cosmic</option>
         <option value="cyberpunk">Cyberpunk Neon</option>
         <option value="emerald">Emerald Studio</option>
         <option value="oled">OLED Pitch Black</option>
@@ -1080,6 +1168,15 @@ export function renderDashboardHtml(): string {
   <main>
     <!-- Left Column: Player & Live Lyrics -->
     <section class="now-playing-container">
+      <!-- Miu Kawaii Hero Banner -->
+      <div class="miu-hero-banner">
+        <img src="/assets/miu_banner.jpg" alt="Miu Banner" class="miu-hero-banner-img" />
+        <div class="miu-hero-banner-overlay">
+          <div class="miu-hero-badge">🎀 Karakter Resmi Miu</div>
+          <div class="miu-hero-quote">Miu siap menemani setiap harimu dengan melodi manis dan alunan santai ~ ✨</div>
+        </div>
+      </div>
+
       <!-- Now Playing Hero Card -->
       <div class="card">
         <div class="hero-media-wrapper">
@@ -1088,7 +1185,7 @@ export function renderDashboardHtml(): string {
 
           <!-- Album Art with 3D Vinyl Disc & Animated Tone Arm -->
           <div class="art-and-disc">
-            <img id="trackArtwork" class="artwork" src="https://via.placeholder.com/180x180/1e293b/94a3b8?text=Idle" alt="Artwork Lagu" />
+            <img id="trackArtwork" class="artwork" src="/assets/miu_avatar.jpg" alt="Artwork Lagu" />
             <div id="vinylDisc" class="vinyl-disc paused">
               <div class="vinyl-center"></div>
             </div>
@@ -1648,8 +1745,8 @@ export function renderDashboardHtml(): string {
 
         // Track info
         document.getElementById('trackTitle').innerText = cur.title;
-        document.getElementById('trackArtist').innerText = cur.author || 'Unknown Artist';
-        document.getElementById('trackArtwork').src = cur.artworkUrl || 'https://via.placeholder.com/180x180/1e293b/94a3b8?text=Track';
+        document.getElementById('trackArtist').innerText = cur.author || 'Miu Music';
+        document.getElementById('trackArtwork').src = cur.artworkUrl || '/assets/miu_avatar.jpg';
         
         // Ambient Artwork Backdrop Glow
         const ambientArt = document.getElementById('ambientArtBlur');
@@ -1724,13 +1821,13 @@ export function renderDashboardHtml(): string {
         if (ambientArt) {
           ambientArt.style.backgroundImage = 'none';
         }
-        document.getElementById('trackTitle').innerText = 'Tidak ada lagu yang sedang diputar';
-        document.getElementById('trackArtist').innerText = 'Miu Music Bot';
-        document.getElementById('trackArtwork').src = 'https://via.placeholder.com/180x180/1e293b/94a3b8?text=Idle';
+        document.getElementById('trackTitle').innerText = 'Menunggu Lagu Dimulai ~ 🌸';
+        document.getElementById('trackArtist').innerText = 'Miu siap menemani harimu dengan musik manis! 🎀';
+        document.getElementById('trackArtwork').src = '/assets/miu_avatar.jpg';
         document.getElementById('progressFill').style.width = '0%';
         document.getElementById('currentTime').innerText = '00:00';
         document.getElementById('totalDuration').innerText = '00:00';
-        document.getElementById('queueList').innerHTML = '<div style="color: var(--text-dim); font-size: 0.85rem; text-align: center; padding: 2.5rem 0;">Antrean kosong. Putar lagu dari search bar di atas!</div>';
+        document.getElementById('queueList').innerHTML = '<div style="color: var(--text-dim); font-size: 0.85rem; text-align: center; padding: 2.5rem 0;">Antrean kosong. Yuk cari lagu atau paste link YouTube / Spotify di atas! 🐇</div>';
       }
 
       // Stats
@@ -1884,7 +1981,7 @@ export function renderDashboardHtml(): string {
     });
 
     function applyTheme(theme) {
-      document.body.classList.remove('theme-oled', 'theme-cyberpunk', 'theme-emerald');
+      document.body.classList.remove('theme-oled', 'theme-cyberpunk', 'theme-emerald', 'theme-cosmic');
       if (theme !== 'default') {
         document.body.classList.add('theme-' + theme);
       }

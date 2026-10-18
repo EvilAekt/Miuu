@@ -8,6 +8,7 @@ import { onInteractionCreate } from "./events/interactionCreate.js";
 import { onVoiceStateUpdate } from "./events/voiceStateUpdate.js";
 import { startHealthMonitor } from "./jobs/healthMonitor.js";
 import { startDashboardServer } from "./web/server.js";
+import { setUiClient } from "./ui/embeds.js";
 
 // Ensure IPv4 is preferred over IPv6 in cloud container environments
 try {
@@ -29,6 +30,7 @@ async function main() {
       GatewayIntentBits.GuildVoiceStates,
     ],
   });
+  setUiClient(client);
 
   // 2. Mulai web dashboard server SEGERA agar port terbuka seketika untuk cloud provider (Render/Koyeb)
   const dashboardPort = Number(process.env.PORT) || 3000;

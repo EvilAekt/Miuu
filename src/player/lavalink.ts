@@ -24,7 +24,7 @@ import {
   recordTrackTransition,
   recordArtistAffinity,
 } from "../recommend/smartRecommend.js";
-import { createNowPlayingEmbed, createNowPlayingComponents, createErrorEmbed } from "../ui/embeds.js";
+import { createNowPlayingEmbed, createNowPlayingComponents, createErrorEmbed, setUiClient } from "../ui/embeds.js";
 import { createNowPlayingPayloadV2 } from "../ui/componentsV2.js";
 import { broadcastDashboardEvent, getCompleteDashboardStatus } from "../web/server.js";
 import { prefetchTrackLyrics } from "../lyrics/lyricsService.js";
@@ -34,6 +34,7 @@ const autoLeaveTimers = new Map<string, NodeJS.Timeout>();
 export const lastNowPlayingMessages = new Map<string, { channelId: string; messageId: string }>();
 
 export function initLavalink(client: Client): LavalinkManager {
+  setUiClient(client);
   const primaryNode = {
     id: "primary",
     host: config.LAVALINK_HOST,

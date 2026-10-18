@@ -15,6 +15,7 @@ RUN npm ci
 
 COPY tsconfig.json ./
 COPY src/ ./src/
+COPY assets/ ./assets/
 
 # Compile TypeScript to dist/
 RUN npm run build

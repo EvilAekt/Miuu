@@ -1,6 +1,8 @@
 import http from "node:http";
 import os from "node:os";
 import zlib from "node:zlib";
+import fs from "node:fs";
+import path from "node:path";
 import type { Client } from "discord.js";
 import { lavalink } from "../player/lavalink.js";
 import { getListeningStats, getRecentHealthEvents } from "../db/index.js";
@@ -338,6 +340,30 @@ export function startDashboardServer(
         })
       );
       return;
+    }
+
+    // Static Assets: GET /assets/*
+    if (pathname.startsWith("/assets/") && req.method === "GET") {
+      const filename = path.basename(pathname);
+      const filePath = path.join(process.cwd(), "assets", filename);
+      if (fs.existsSync(filePath)) {
+        const ext = path.extname(filename).toLowerCase();
+        const mimeTypes: Record<string, string> = {
+          ".jpg": "image/jpeg",
+          ".jpeg": "image/jpeg",
+          ".png": "image/png",
+          ".webp": "image/webp",
+          ".gif": "image/gif",
+          ".svg": "image/svg+xml",
+        };
+        const contentType = mimeTypes[ext] || "application/octet-stream";
+        res.writeHead(200, {
+          "Content-Type": contentType,
+          "Cache-Control": "public, max-age=86400",
+        });
+        fs.createReadStream(filePath).pipe(res);
+        return;
+      }
     }
 
     // LAN Info: GET /api/lan-info (PRD v8 Feature 4)
