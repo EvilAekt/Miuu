@@ -1,3 +1,4 @@
+import dns from "node:dns";
 import { Client, GatewayIntentBits } from "discord.js";
 import { config } from "./config/env.js";
 import { initLavalink } from "./player/lavalink.js";
@@ -7,6 +8,11 @@ import { onInteractionCreate } from "./events/interactionCreate.js";
 import { onVoiceStateUpdate } from "./events/voiceStateUpdate.js";
 import { startHealthMonitor } from "./jobs/healthMonitor.js";
 import { startDashboardServer } from "./web/server.js";
+
+// Ensure IPv4 is preferred over IPv6 in cloud container environments
+try {
+  dns.setDefaultResultOrder("ipv4first");
+} catch {}
 
 async function main() {
   console.log("==========================================");
@@ -98,12 +104,24 @@ async function main() {
     process.exit(0);
   };
 
+  client.on("debug", (msg) => {
+    // Only log essential gateway steps to avoid spam
+    if (msg.includes("Gateway") || msg.includes("Shard") || msg.includes("Session") || msg.includes("Heartbeat") || msg.includes("token")) {
+      console.log(`[Discord Debug] ${msg}`);
+    }
+  });
+
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
 
   // 7. Login ke Discord Gateway
-  console.log("[Discord] Menghubungkan ke Discord Gateway...");
-  await client.login(config.DISCORD_TOKEN);
+  console.log(`[Discord] Menghubungkan ke Discord Gateway (Token length: ${config.DISCORD_TOKEN?.length ?? 0})...`);
+  try {
+    const tokenResult = await client.login(config.DISCORD_TOKEN);
+    console.log(`[Discord] client.login() Promise resolved! Bot token authenticated.`);
+  } catch (loginErr: any) {
+    console.error("[Discord Login Fatal Error]", loginErr?.message ?? loginErr);
+  }
 }
 
 main().catch((err) => {
