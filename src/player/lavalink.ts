@@ -37,10 +37,11 @@ export function initLavalink(client: Client): LavalinkManager {
   lavalink = new LavalinkManager({
     nodes: [
       {
-        id: "local",
+        id: "default",
         host: config.LAVALINK_HOST,
         port: config.LAVALINK_PORT,
         authorization: config.LAVALINK_PASSWORD,
+        secure: config.LAVALINK_SECURE ?? (config.LAVALINK_PORT === 443),
       },
     ],
     sendToShard: (guildId, payload) => client.guilds.cache.get(guildId)?.shard?.send(payload),

@@ -16,6 +16,7 @@ music/
 scratch/
 
 # Build and logs
+dist/
 out/
 logs/
 *.log

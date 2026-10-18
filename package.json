@@ -6,7 +6,9 @@
   "main": "test-spotify.mjs",
   "scripts": {
     "dev": "tsx watch --env-file=.env src/index.ts",
+    "build": "tsc",
     "start": "tsx --env-file=.env src/index.ts",
+    "start:prod": "node dist/index.js",
     "lavalink": ".\\jre\\bin\\java.exe -jar Lavalink.jar",
     "test:spotify": "node test-spotify.mjs spotify-links.txt",
     "test:lavalink": "node --env-file=.env test-lavalink.mjs",
@@ -18,12 +20,12 @@
     "discord.js": "^14.18.0",
     "lavalink-client": "^2.4.4",
     "spotify-url-info": "^3.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5.7.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^9.6.0",
-    "@types/node": "^26.6.5",
-    "tsx": "^4.23.15",
-    "typescript": "^5.7.3"
+    "@types/node": "^26.6.5"
   }
 }

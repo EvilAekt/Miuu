@@ -8,6 +8,7 @@ const envSchema = z.object({
   LAVALINK_HOST: z.string().default("127.0.0.1"),
   LAVALINK_PORT: z.string().default("2333").transform((val) => Number(val)),
   LAVALINK_PASSWORD: z.string().min(1, "LAVALINK_PASSWORD is required in .env"),
+  LAVALINK_SECURE: z.string().optional().transform((val) => val === "true"),
   AUTO_LEAVE_MINUTES: z.string().default("3").transform((val) => Number(val)),
   DEFAULT_VOLUME: z.string().default("50").transform((val) => Number(val)),
 });
