@@ -24,21 +24,25 @@ async function main() {
     ],
   });
 
-  // 2. Inisialisasi Lavalink Client
+  // 2. Mulai web dashboard server SEGERA agar port terbuka seketika untuk cloud provider (Render/Koyeb)
+  const dashboardPort = Number(process.env.PORT) || 3000;
+  let dashboardServer: any = null;
+  try {
+    dashboardServer = startDashboardServer(client, { port: dashboardPort, host: "0.0.0.0" });
+  } catch (err: any) {
+    console.error("[Dashboard Web Error] Gagal memulai dashboard server:", err?.message ?? err);
+  }
+
+  // 3. Inisialisasi Lavalink Client
   const lavalink = initLavalink(client);
 
-  let dashboardServer: any = null;
-
-  // 2. Registrasi Event Discord
+  // 4. Registrasi Event Discord
   client.once("clientReady", async (c) => {
     await onReady(c);
     // Inisialisasi koneksi Lavalink Node setelah bot login
     await lavalink.init({ id: c.user.id, username: c.user.username });
     // Mulai background health monitor (PRD v2 Epic 1)
     startHealthMonitor(c);
-    // Mulai web dashboard (PRD v2 Epic 9 & PRD v8 Feature 4)
-    const dashboardPort = Number(process.env.PORT) || 3000;
-    dashboardServer = startDashboardServer(c, { port: dashboardPort, host: "0.0.0.0" });
   });
 
   client.on("interactionCreate", onInteractionCreate);
