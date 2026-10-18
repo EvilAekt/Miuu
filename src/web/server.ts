@@ -7,6 +7,7 @@ import { getListeningStats, getRecentHealthEvents } from "../db/index.js";
 import { fetchLyrics, cleanTrackTitle } from "../lyrics/lyricsService.js";
 import { isMaintenanceMode } from "../config/maintenance.js";
 import { getCachedSearchResults, setCachedSearchResults } from "../player/searchCache.js";
+import { config as envConfig } from "../config/env.js";
 import { renderDashboardHtml } from "./dashboardHtml.js";
 
 export { renderDashboardHtml };
@@ -251,6 +252,54 @@ export function startDashboardServer(
     // 1. API: GET /api/status (REST Polling Fallback)
     if (pathname === "/api/status" && req.method === "GET") {
       return sendJson(getCompleteDashboardStatus(client));
+    }
+
+    // 1b. API: GET /api/diag (Live Cloud Diagnostics)
+    if (pathname === "/api/diag" && req.method === "GET") {
+      const diag: any = {
+        serverTime: Date.now(),
+        clientReady: client.isReady(),
+        wsStatus: client.ws?.status,
+        ping: client.ws?.ping,
+        nodeVersion: process.version,
+        tokenLength: envConfig.DISCORD_TOKEN?.length ?? 0,
+      };
+
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch("https://discord.com/api/v10/gateway/bot", {
+          headers: { Authorization: `Bot ${envConfig.DISCORD_TOKEN}` },
+          signal: controller.signal,
+        });
+        clearTimeout(timer);
+        diag.gatewayHttp = { status: res.status, ok: res.ok, body: await res.json() };
+      } catch (err: any) {
+        diag.gatewayHttp = { error: err?.message ?? String(err) };
+      }
+
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 4000);
+        const proto = envConfig.LAVALINK_SECURE ? "https" : "http";
+        const res = await fetch(`${proto}://${envConfig.LAVALINK_HOST}:${envConfig.LAVALINK_PORT}/v4/info`, {
+          headers: { Authorization: envConfig.LAVALINK_PASSWORD },
+          signal: controller.signal,
+        });
+        clearTimeout(timer);
+        diag.lavalinkHttp = { status: res.status, ok: res.ok, body: await res.json() };
+      } catch (err: any) {
+        diag.lavalinkHttp = { error: err?.message ?? String(err) };
+      }
+
+      if (!client.isReady() && (client.ws?.status === 3 || client.ws?.status === 5)) {
+        console.log("[Diagnostic] Memanggil ulang client.login dari endpoint /api/diag...");
+        client.login(envConfig.DISCORD_TOKEN).catch((err) => {
+          console.error("[Diagnostic Login Error]", err);
+        });
+      }
+
+      return sendJson(diag);
     }
 
     // PWA Manifest: GET /manifest.json (PRD v4 E6)
