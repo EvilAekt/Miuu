@@ -14,28 +14,29 @@ export async function onReady(client: Client): Promise<void> {
   const joinedGuilds = client.guilds.cache.map((g) => `${g.name} [${g.id}]`).join(", ");
   console.log(`[Guilds] Bot bergabung di ${client.guilds.cache.size} server: ${joinedGuilds || "(belum ada server)"}`);
 
-  try {
-    const rest = new REST().setToken(config.DISCORD_TOKEN);
-    const body = commands.map((c) => c.data.toJSON());
+  const rest = new REST().setToken(config.DISCORD_TOKEN);
+  const body = commands.map((c) => c.data.toJSON());
 
-    console.log(`[Slash Commands] Mendaftarkan ${commands.length} guild command ke Guild ID: ${config.GUILD_ID}...`);
-    await rest.put(Routes.applicationGuildCommands(client.user!.id, config.GUILD_ID), {
-      body,
-    });
-    console.log(`[Slash Commands] Berhasil mendaftarkan semua guild command!`);
-  } catch (error: any) {
-    console.error(`[Slash Commands Error] Gagal mendaftarkan guild command:`, error?.message ?? error);
+  // 1. Daftarkan secara instan ke server utama (0 delay)
+  if (config.GUILD_ID) {
     try {
-      console.log(`[Slash Commands] Mencoba mendaftarkan command secara global...`);
-      const rest = new REST().setToken(config.DISCORD_TOKEN);
-      const body = commands.map((c) => c.data.toJSON());
-      await rest.put(Routes.applicationCommands(client.user!.id), { body });
-      console.log(`[Slash Commands] Berhasil mendaftarkan command secara global!`);
-    } catch (globalErr: any) {
-      console.error(`[Slash Commands Error] Pendaftaran global juga gagal:`, globalErr?.message ?? globalErr);
-      console.log(
-        `[Tips Izin] Pastikan bot diundang dengan scope 'bot' DAN 'applications.commands':\nhttps://discord.com/oauth2/authorize?client_id=${client.user?.id}&permissions=8&scope=bot%20applications.commands`
-      );
+      console.log(`[Slash Commands] Mendaftarkan ${commands.length} command ke server utama (${config.GUILD_ID})...`);
+      await rest.put(Routes.applicationGuildCommands(client.user!.id, config.GUILD_ID), { body });
+      console.log(`[Slash Commands] Berhasil mendaftarkan guild command di server utama!`);
+    } catch (err: any) {
+      console.warn(`[Slash Commands Warning] Gagal mendaftarkan guild command:`, err?.message ?? err);
     }
+  }
+
+  // 2. Daftarkan secara GLOBAL agar muncul otomatis di SEMUA server Discord lain
+  try {
+    console.log(`[Slash Commands] Mendaftarkan ${commands.length} command secara GLOBAL untuk multi-server...`);
+    await rest.put(Routes.applicationCommands(client.user!.id), { body });
+    console.log(`[Slash Commands] Berhasil mendaftarkan command secara GLOBAL ke seluruh server!`);
+  } catch (globalErr: any) {
+    console.error(`[Slash Commands Error] Pendaftaran global gagal:`, globalErr?.message ?? globalErr);
+    console.log(
+      `[Tips Izin] Pastikan bot diundang dengan scope 'bot' DAN 'applications.commands':\nhttps://discord.com/oauth2/authorize?client_id=${client.user?.id}&permissions=8&scope=bot%20applications.commands`
+    );
   }
 }
