@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Environment and sensitive secrets
+.env
+*.env
+!.env.example
+application.yml
+
+# Runtime data & sqlite databases
+data/
+*.db
+*.db-journal
+backups/
+music/
+scratch/
+
+# Build and logs
+out/
+logs/
+*.log
+
+# Lavalink runtime & Java binaries (large binaries)
+Lavalink.jar
+jre/
+plugins/
+
+# OS metadata
+.DS_Store
+Thumbs.db

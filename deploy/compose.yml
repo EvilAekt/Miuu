@@ -1,0 +1,32 @@
+services:
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:4
+    container_name: music-bot-lavalink
+    restart: unless-stopped
+    environment:
+      - _JAVA_OPTIONS=-Xmx1G
+    volumes:
+      - ../application.yml:/opt/Lavalink/application.yml
+      - ../plugins:/opt/Lavalink/plugins
+    ports:
+      - "127.0.0.1:2333:2333"
+
+  bot:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: music-bot-app
+    restart: unless-stopped
+    depends_on:
+      - lavalink
+    env_file:
+      - ../.env
+    environment:
+      - LAVALINK_HOST=lavalink
+      - LAVALINK_PORT=2333
+    volumes:
+      - ../data:/app/data
+      - ../music:/app/music
+      - ../backups:/app/backups
+    ports:
+      - "127.0.0.1:3000:3000"

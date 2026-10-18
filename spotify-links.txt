@@ -1,0 +1,25 @@
+# Satu link per baris. Opsional: tambah jumlah lagu asli di belakang, contoh: <link> expected=250
+# Baris berawalan # diabaikan.
+# Isi minimal: 1 track, 1 album, 1 playlist publik kecil, 1 playlist lebih dari 100 lagu,
+# 1 playlist privat, 1 link regional /intl-xx/, 1 episode podcast, 1 link artist.
+
+# 1. Track
+https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas
+
+# 2. Album
+https://open.spotify.com/album/4m2880jivSbbyEGAKfITCa expected=12
+
+# 3. Playlist publik kecil
+https://open.spotify.com/playlist/3Q4cPwMHY95ZHXtmcU2xvH expected=8
+
+# 4. Playlist >100 lagu
+https://open.spotify.com/playlist/5ABHKGoOzxKaGA29Nm9v54 expected=100
+
+# 5. Link regional
+https://open.spotify.com/intl-id/track/5nTtCOCds6I0PHMNtqelas
+
+# 6. Episode podcast
+https://open.spotify.com/episode/7makk4oTQel546B0PZlDM5
+
+# 7. Link artist
+https://open.spotify.com/artist/5pKCCKE222ZGEQo2ZifflV

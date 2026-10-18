@@ -1,0 +1,43 @@
+server:
+  port: 2333
+  address: 127.0.0.1
+
+lavalink:
+  plugins:
+    - dependency: "dev.lavalink.youtube:youtube-plugin:2be8e542d3f6f178e048dca565892684c2e40177"
+      snapshot: true
+  server:
+    password: "YOUR_LAVALINK_PASSWORD"
+    sources:
+      youtube: false
+      soundcloud: true
+      http: false
+      local: false
+
+plugins:
+  youtube:
+    enabled: true
+    oauth:
+      enabled: false
+      refreshToken: "YOUR_YOUTUBE_REFRESH_TOKEN"
+      skipInitialization: true
+    allowSearch: true
+    allowDirectVideoIds: true
+    allowDirectPlaylistIds: true
+    clients:
+      - IOS
+      - ANDROID_MUSIC
+      - MUSIC
+      - MWEB
+      - TV
+      - ANDROID_VR
+      - WEBEMBEDDED
+      - WEB
+      - TVHTML5_SIMPLY
+
+logging:
+  file:
+    path: ./logs/
+  level:
+    root: INFO
+    lavalink: INFO

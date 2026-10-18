@@ -1,0 +1,29 @@
+{
+  "name": "discord-music-bot-spike",
+  "version": "1.0.0",
+  "description": "Milestone 0 spike scripts for Discord Music Bot",
+  "type": "module",
+  "main": "test-spotify.mjs",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/index.ts",
+    "start": "tsx --env-file=.env src/index.ts",
+    "lavalink": ".\\jre\\bin\\java.exe -jar Lavalink.jar",
+    "test:spotify": "node test-spotify.mjs spotify-links.txt",
+    "test:lavalink": "node --env-file=.env test-lavalink.mjs",
+    "test:play": "node --env-file=.env test-play.mjs",
+    "test": "tsx --env-file=.env --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "discord.js": "^14.18.0",
+    "lavalink-client": "^2.4.4",
+    "spotify-url-info": "^3.3.3",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5.7.3"
+  }
+}
