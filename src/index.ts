@@ -61,6 +61,9 @@ async function main() {
 
   client.on("interactionCreate", onInteractionCreate);
   client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState, client));
+  client.on("error", (err) => console.error("[Discord Client Error]", err));
+  client.on("shardError", (err, id) => console.error(`[Discord Shard ${id} Error]`, err));
+  client.on("shardDisconnect", (event, id) => console.warn(`[Discord Shard ${id} Disconnect]`, event));
 
   // 5. Tangani unhandled errors secara global agar kontainer tidak pernah exit dengan code 1
   process.on("unhandledRejection", (reason: any) => {

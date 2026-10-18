@@ -155,6 +155,7 @@ export function getCompleteDashboardStatus(client: Client) {
   return {
     botName: client.user?.username || "Discord Music Bot",
     connected: client.isReady(),
+    wsStatus: client.ws?.status ?? -1,
     ping: client.ws?.ping ?? 0,
     guildCount: client.guilds?.cache?.size ?? 1,
     maintenanceMode: isMaintenanceMode(),
