@@ -13,11 +13,11 @@ services:
       - key: GUILD_ID
         sync: false
       - key: LAVALINK_HOST
-        value: lava-v4.ajieblogs.eu.org
+        value: lavalinkv4.serenetia.com
       - key: LAVALINK_PORT
         value: 443
       - key: LAVALINK_PASSWORD
-        value: https://dsc.gg/ajielavalink
+        value: https://dsc.gg/ajidevserver
       - key: LAVALINK_SECURE
         value: "true"
       - key: MULTI_SERVER_MODE

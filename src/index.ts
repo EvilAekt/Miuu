@@ -38,17 +38,40 @@ async function main() {
 
   // 4. Registrasi Event Discord
   client.once("clientReady", async (c) => {
-    await onReady(c);
+    try {
+      await onReady(c);
+    } catch (err: any) {
+      console.error("[Ready Error]", err?.message ?? err);
+    }
+
     // Inisialisasi koneksi Lavalink Node setelah bot login
-    await lavalink.init({ id: c.user.id, username: c.user.username });
+    try {
+      await lavalink.init({ id: c.user.id, username: c.user.username });
+    } catch (err: any) {
+      console.error("[Lavalink Init Warning] Gagal menginisialisasi Lavalink saat startup (akan otomatis reconnect):", err?.message ?? err);
+    }
+
     // Mulai background health monitor (PRD v2 Epic 1)
-    startHealthMonitor(c);
+    try {
+      startHealthMonitor(c);
+    } catch (err: any) {
+      console.error("[Health Monitor Error]", err?.message ?? err);
+    }
   });
 
   client.on("interactionCreate", onInteractionCreate);
   client.on("voiceStateUpdate", (oldState, newState) => onVoiceStateUpdate(oldState, newState, client));
 
-  // 3. Tangani shutdown dengan rapi (simpan snapshot antrean)
+  // 5. Tangani unhandled errors secara global agar kontainer tidak pernah exit dengan code 1
+  process.on("unhandledRejection", (reason: any) => {
+    console.error("[Unhandled Rejection]", reason?.message ?? reason);
+  });
+
+  process.on("uncaughtException", (err: any) => {
+    console.error("[Uncaught Exception]", err?.message ?? err);
+  });
+
+  // 6. Tangani shutdown dengan rapi (simpan snapshot antrean)
   const shutdown = async () => {
     console.log("\n[Shutdown] Menutup koneksi bot...");
     for (const [guildId, player] of lavalink.players) {
@@ -75,7 +98,7 @@ async function main() {
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
 
-  // 4. Login ke Discord Gateway
+  // 7. Login ke Discord Gateway
   console.log("[Discord] Menghubungkan ke Discord Gateway...");
   await client.login(config.DISCORD_TOKEN);
 }

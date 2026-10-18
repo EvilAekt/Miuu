@@ -1,11 +1,20 @@
-import type { ChatInputCommandInteraction, GuildMember } from "discord.js";
+import type { ChatInputCommandInteraction, GuildMember, VoiceBasedChannel } from "discord.js";
 import { lavalink } from "../player/lavalink.js";
 import { createErrorEmbed } from "../ui/embeds.js";
 import type { Player } from "lavalink-client";
 
+export function getUserVoiceChannel(interaction: ChatInputCommandInteraction): VoiceBasedChannel | null {
+  const member = interaction.member as GuildMember | null;
+  if (member?.voice?.channel) return member.voice.channel;
+  
+  const state = interaction.guild?.voiceStates.cache.get(interaction.user.id);
+  if (state?.channel) return state.channel;
+
+  return null;
+}
+
 export async function getValidPlayer(interaction: ChatInputCommandInteraction): Promise<Player | null> {
-  const member = interaction.member as GuildMember;
-  const userVc = member.voice.channel;
+  const userVc = getUserVoiceChannel(interaction);
 
   if (!userVc) {
     await interaction.reply({

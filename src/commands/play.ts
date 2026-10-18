@@ -17,6 +17,7 @@ import { getCachedTrack, setCachedTrack, getGuildSettingsExtended } from "../db/
 import { matchSpotifyToYouTube, lastPlayedSpotifyTracks } from "../matching/matcher.js";
 import { registerSession } from "../sessions/sessionManager.js";
 import { getCachedSearchResults, setCachedSearchResults } from "../player/searchCache.js";
+import { getUserVoiceChannel } from "./utils.js";
 import type { Player, Track, UnresolvedTrack } from "lavalink-client";
 
 export const playCommand: Command = {
@@ -65,8 +66,7 @@ export const playCommand: Command = {
   },
 
   async execute(interaction: ChatInputCommandInteraction) {
-    const member = interaction.member as GuildMember;
-    const voiceChannel = member.voice.channel;
+    const voiceChannel = getUserVoiceChannel(interaction);
 
     if (!voiceChannel) {
       await interaction.reply({
