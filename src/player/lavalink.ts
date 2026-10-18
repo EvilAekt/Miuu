@@ -78,7 +78,7 @@ export function initLavalink(client: Client): LavalinkManager {
 
   lavalink.nodeManager.on("disconnect", (node, reason) => {
     console.warn(`[Lavalink] Node ${node.id} (${node.options.host}) disconnected:`, reason);
-    recordHealthEvent("lavalink", "warn", `Node ${node.id} (${node.options.host}) disconnected: ${reason}`);
+    recordHealthEvent("lavalink", "degraded", `Node ${node.id} (${node.options.host}) disconnected: ${reason}`);
   });
 
   lavalink.nodeManager.on("error", (node, error) => {
@@ -408,7 +408,7 @@ export async function getOrCreatePlayer(
       } catch {}
       for (let i = 0; i < 4; i++) {
         await new Promise((res) => setTimeout(res, 500));
-        if (lavalink.nodeManager.nodes.some((n) => n.connected)) break;
+        if (lavalink.nodeManager.nodes.filter((n) => n.connected).size > 0) break;
       }
     }
 
