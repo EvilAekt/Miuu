@@ -1,0 +1,16 @@
+node_modules
+dist
+data
+backups
+music
+logs
+scratch
+.git
+.env
+*.env
+application.yml
+Lavalink.jar
+jre
+*.log
+Thumbs.db
+.DS_Store

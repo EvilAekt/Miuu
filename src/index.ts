@@ -36,8 +36,9 @@ async function main() {
     await lavalink.init({ id: c.user.id, username: c.user.username });
     // Mulai background health monitor (PRD v2 Epic 1)
     startHealthMonitor(c);
-    // Mulai local web dashboard di http://localhost:3000 (PRD v2 Epic 9 & PRD v8 Feature 4)
-    dashboardServer = startDashboardServer(c, { port: 3000, host: "0.0.0.0" });
+    // Mulai web dashboard (PRD v2 Epic 9 & PRD v8 Feature 4)
+    const dashboardPort = Number(process.env.PORT) || 3000;
+    dashboardServer = startDashboardServer(c, { port: dashboardPort, host: "0.0.0.0" });
   });
 
   client.on("interactionCreate", onInteractionCreate);
