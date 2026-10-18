@@ -16,14 +16,40 @@ export function renderDashboardHtml(): string {
   <!-- Premium Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-dark: #120914;
-      --card-bg: rgba(28, 14, 32, 0.72);
-      --card-border: rgba(255, 166, 201, 0.18);
-      --card-hover-border: rgba(255, 141, 178, 0.55);
+      /* Miu Strawberry Milk & Sakura Dream (Ultra-Kawaii Default) */
+      --bg-dark: #fff5f8;
+      --bg-gradient: radial-gradient(circle at 12% 18%, #fff0f5 0%, #ffe4ec 50%, #ffd6e2 100%);
+      --card-bg: rgba(255, 255, 255, 0.82);
+      --card-border: rgba(255, 182, 193, 0.65);
+      --card-hover-border: #ff7597;
+      --card-shadow: 0 16px 38px rgba(255, 145, 175, 0.22);
+      --primary: #ff7597;
+      --primary-hover: #ff527d;
+      --primary-glow: rgba(255, 117, 151, 0.40);
+      --accent: #ff94b2;
+      --accent-glow: rgba(255, 148, 178, 0.45);
+      --text-main: #4a2835;
+      --text-muted: #8c5e6f;
+      --text-dim: #b892a0;
+      --success: #65d6a4;
+      --warning: #ffb86c;
+      --error: #ff5c7c;
+      --font-display: 'Quicksand', 'Comfortaa', 'Outfit', sans-serif;
+      --font-body: 'Nunito', 'Inter', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body.theme-miu-dark {
+      --bg-dark: #140816;
+      --bg-gradient: radial-gradient(circle at 20% 20%, #1e0c20 0%, #140816 60%, #0d040e 100%);
+      --card-bg: rgba(36, 16, 40, 0.78);
+      --card-border: rgba(255, 166, 201, 0.25);
+      --card-hover-border: rgba(255, 141, 178, 0.60);
+      --card-shadow: 0 16px 38px rgba(0, 0, 0, 0.6);
       --primary: #ffa6c9;
       --primary-hover: #ff85ab;
       --primary-glow: rgba(255, 166, 201, 0.45);
@@ -32,16 +58,11 @@ export function renderDashboardHtml(): string {
       --text-main: #fff0f5;
       --text-muted: #d8b4c8;
       --text-dim: #99788f;
-      --success: #77dd77;
-      --warning: #fbcfe8;
-      --error: #ff6b81;
-      --font-display: 'Outfit', sans-serif;
-      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
     }
 
     body.theme-cosmic {
       --bg-dark: #080c16;
+      --bg-gradient: radial-gradient(circle at 50% 50%, #0f172a 0%, #080c16 100%);
       --card-bg: rgba(15, 23, 42, 0.65);
       --card-border: rgba(255, 255, 255, 0.08);
       --card-hover-border: rgba(99, 102, 241, 0.4);
@@ -57,6 +78,7 @@ export function renderDashboardHtml(): string {
 
     body.theme-oled {
       --bg-dark: #000000;
+      --bg-gradient: none;
       --card-bg: rgba(14, 14, 18, 0.88);
       --card-border: rgba(255, 255, 255, 0.12);
       --card-hover-border: rgba(255, 255, 255, 0.35);
@@ -65,10 +87,14 @@ export function renderDashboardHtml(): string {
       --primary-glow: rgba(255, 255, 255, 0.25);
       --accent: #a1a1aa;
       --accent-glow: rgba(161, 161, 170, 0.25);
+      --text-main: #ffffff;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
     }
 
     body.theme-cyberpunk {
       --bg-dark: #06020e;
+      --bg-gradient: radial-gradient(circle at 10% 20%, #1a0826 0%, #06020e 100%);
       --card-bg: rgba(24, 7, 43, 0.75);
       --card-border: rgba(244, 63, 94, 0.25);
       --card-hover-border: rgba(0, 245, 255, 0.5);
@@ -77,10 +103,14 @@ export function renderDashboardHtml(): string {
       --primary-glow: rgba(244, 63, 94, 0.45);
       --accent: #00f5ff;
       --accent-glow: rgba(0, 245, 255, 0.45);
+      --text-main: #fff;
+      --text-muted: #cbd5e1;
+      --text-dim: #94a3b8;
     }
 
     body.theme-emerald {
       --bg-dark: #03140f;
+      --bg-gradient: radial-gradient(circle at 50% 50%, #062019 0%, #03140f 100%);
       --card-bg: rgba(6, 32, 25, 0.75);
       --card-border: rgba(16, 185, 129, 0.2);
       --card-hover-border: rgba(110, 231, 183, 0.5);
@@ -89,6 +119,9 @@ export function renderDashboardHtml(): string {
       --primary-glow: rgba(16, 185, 129, 0.4);
       --accent: #6ee7b7;
       --accent-glow: rgba(110, 231, 183, 0.35);
+      --text-main: #fff;
+      --text-muted: #cbd5e1;
+      --text-dim: #94a3b8;
     }
 
     * {
@@ -99,6 +132,8 @@ export function renderDashboardHtml(): string {
 
     body {
       background-color: var(--bg-dark);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--text-main);
       font-family: var(--font-body);
       min-height: 100vh;
@@ -108,7 +143,7 @@ export function renderDashboardHtml(): string {
       position: relative;
     }
 
-    /* Ambient Dynamic Aurora Background */
+    /* Ambient Dynamic Kawaii Aurora Background */
     .ambient-glow {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -120,25 +155,25 @@ export function renderDashboardHtml(): string {
       position: absolute;
       border-radius: 50%;
       filter: blur(100px);
-      opacity: 0.28;
+      opacity: 0.32;
       animation: floatOrb 18s ease-in-out infinite alternate;
     }
     .orb-1 {
-      width: 500px; height: 500px;
+      width: 520px; height: 520px;
       top: -150px; left: -100px;
       background: var(--primary);
     }
     .orb-2 {
-      width: 450px; height: 450px;
+      width: 480px; height: 480px;
       bottom: -150px; right: -100px;
-      background: #e0b0ff;
+      background: #ffd1dc;
       animation-duration: 22s;
     }
     .orb-3 {
-      width: 350px; height: 350px;
-      top: 40%; left: 60%;
-      background: #ff85a2;
-      opacity: 0.20;
+      width: 380px; height: 380px;
+      top: 40%; left: 55%;
+      background: #ffb7c5;
+      opacity: 0.24;
       animation-duration: 26s;
     }
     @keyframes floatOrb {
@@ -147,19 +182,66 @@ export function renderDashboardHtml(): string {
       100% { transform: translate(-40px, 80px) scale(0.95); }
     }
 
+    /* Kawaii Floating Particles */
+    .kawaii-particles {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      user-select: none;
+      filter: drop-shadow(0 2px 6px rgba(255, 117, 151, 0.3));
+      animation: floatKawaii 14s ease-in-out infinite alternate;
+      opacity: 0.65;
+    }
+    .p-1 { top: 8%; left: 6%; font-size: 1.5rem; animation-duration: 16s; }
+    .p-2 { top: 25%; left: 92%; font-size: 1.2rem; animation-duration: 12s; animation-delay: -3s; }
+    .p-3 { top: 72%; left: 4%; font-size: 1.6rem; animation-duration: 20s; animation-delay: -5s; }
+    .p-4 { top: 86%; left: 88%; font-size: 1.4rem; animation-duration: 18s; animation-delay: -2s; }
+    .p-5 { top: 48%; left: 95%; font-size: 1.5rem; animation-duration: 22s; animation-delay: -7s; }
+    .p-6 { top: 16%; left: 48%; font-size: 1.3rem; animation-duration: 15s; animation-delay: -9s; }
+    .p-7 { top: 62%; left: 52%; font-size: 1.1rem; animation-duration: 19s; animation-delay: -4s; }
+    .p-8 { top: 38%; left: 8%; font-size: 1.4rem; animation-duration: 17s; animation-delay: -6s; }
+    .p-9 { top: 92%; left: 40%; font-size: 1.2rem; animation-duration: 21s; animation-delay: -8s; }
+    .p-10 { top: 5%; left: 78%; font-size: 1.3rem; animation-duration: 13s; animation-delay: -1s; }
+
+    @keyframes floatKawaii {
+      0% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+      50% {
+        transform: translateY(-26px) translateX(14px) rotate(15deg) scale(1.08);
+      }
+      100% {
+        transform: translateY(20px) translateX(-14px) rotate(-12deg) scale(0.96);
+      }
+    }
+
     /* Header */
     header {
       position: sticky;
       top: 0;
       z-index: 50;
       padding: 0.85rem 2rem;
-      background: rgba(8, 12, 22, 0.75);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 2px solid var(--card-border);
+      box-shadow: 0 4px 20px rgba(255, 145, 175, 0.12);
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 1.5rem;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    body.theme-miu-dark header,
+    body.theme-cosmic header,
+    body.theme-oled header,
+    body.theme-cyberpunk header,
+    body.theme-emerald header {
+      background: rgba(18, 9, 20, 0.82);
     }
     @media (max-width: 768px) {
       header {
@@ -175,17 +257,21 @@ export function renderDashboardHtml(): string {
       font-family: var(--font-display);
       font-weight: 800;
       font-size: 1.25rem;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
     }
     .brand-avatar-box {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
       overflow: hidden;
-      border: 2px solid var(--primary);
-      box-shadow: 0 0 14px var(--primary-glow);
+      border: 2.5px solid var(--primary);
+      box-shadow: 0 4px 14px var(--primary-glow);
       flex-shrink: 0;
-      background: #1e1122;
+      background: #ffeef3;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .brand-avatar-box:hover {
+      transform: scale(1.08) rotate(3deg);
     }
     .brand-avatar-img {
       width: 100%;
@@ -196,17 +282,17 @@ export function renderDashboardHtml(): string {
     .brand-title {
       font-family: var(--font-display);
       font-weight: 800;
-      font-size: 1.25rem;
-      color: #fff;
+      font-size: 1.3rem;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 0.35rem;
     }
     .brand-sub {
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
@@ -214,60 +300,62 @@ export function renderDashboardHtml(): string {
     .miu-hero-banner {
       position: relative;
       width: 100%;
-      height: 140px;
-      border-radius: 20px;
+      height: 145px;
+      border-radius: 26px;
       overflow: hidden;
-      border: 1px solid var(--card-border);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
-      margin-bottom: 0.5rem;
+      border: 2px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 0.6rem;
     }
     .miu-hero-banner-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center 35%;
-      transition: transform 0.6s ease;
+      transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
       display: block;
     }
     .miu-hero-banner:hover .miu-hero-banner-img {
-      transform: scale(1.03);
+      transform: scale(1.04);
     }
     .miu-hero-banner-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(18, 9, 20, 0.90) 0%, rgba(18, 9, 20, 0.50) 55%, transparent 100%);
+      background: linear-gradient(90deg, rgba(74, 40, 53, 0.88) 0%, rgba(74, 40, 53, 0.45) 55%, transparent 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding: 1.5rem 2rem;
-      gap: 0.4rem;
+      gap: 0.45rem;
     }
     .miu-hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      background: rgba(255, 166, 201, 0.22);
-      border: 1px solid rgba(255, 166, 201, 0.45);
-      color: #ffccd9;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.25rem 0.75rem;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255, 255, 255, 0.45);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 0.3rem 0.85rem;
       border-radius: 9999px;
       width: fit-content;
       letter-spacing: 0.04em;
       text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
     .miu-hero-quote {
       font-family: var(--font-display);
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: #fff0f5;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
     }
     @media (max-width: 680px) {
-      .miu-hero-banner { height: 110px; }
+      .miu-hero-banner { height: 115px; border-radius: 20px; }
       .miu-hero-banner-overlay { padding: 1rem 1.25rem; }
-      .miu-hero-quote { font-size: 0.85rem; }
+      .miu-hero-quote { font-size: 0.88rem; }
     }
 
     /* Top Search / Quick Play Bar */
@@ -288,42 +376,53 @@ export function renderDashboardHtml(): string {
     }
     .search-input {
       width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid var(--card-border);
       border-radius: 9999px;
-      padding: 0.55rem 3.2rem 0.55rem 1.1rem;
-      color: #fff;
-      font-size: 0.85rem;
+      padding: 0.6rem 3.4rem 0.6rem 1.25rem;
+      color: var(--text-main);
+      font-size: 0.88rem;
+      font-weight: 600;
       outline: none;
       transition: all 0.25s ease;
       font-family: var(--font-body);
+      box-shadow: inset 0 2px 4px rgba(255, 182, 193, 0.12);
+    }
+    body.theme-miu-dark .search-input,
+    body.theme-cosmic .search-input,
+    body.theme-oled .search-input,
+    body.theme-cyberpunk .search-input,
+    body.theme-emerald .search-input {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
     }
     .search-input:focus {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-glow);
     }
     .search-input::placeholder {
       color: var(--text-dim);
     }
     .search-submit-btn {
       position: absolute;
-      right: 4px;
-      width: 32px;
-      height: 32px;
+      right: 5px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       border: none;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.2s;
+      box-shadow: 0 4px 10px var(--primary-glow);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .search-submit-btn:hover {
-      background: var(--primary-hover);
-      transform: scale(1.05);
+      transform: scale(1.12);
+      box-shadow: 0 6px 14px var(--primary-glow);
     }
 
     /* Header Badges & Actions */
@@ -336,56 +435,89 @@ export function renderDashboardHtml(): string {
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      padding: 0.35rem 0.85rem;
+      padding: 0.4rem 0.95rem;
       border-radius: 9999px;
-      font-size: 0.78rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-main);
+      border: 1.5px solid var(--card-border);
+      box-shadow: 0 2px 10px rgba(255, 145, 175, 0.15);
+    }
+    body.theme-miu-dark .status-badge,
+    body.theme-cosmic .status-badge,
+    body.theme-oled .status-badge,
+    body.theme-cyberpunk .status-badge,
+    body.theme-emerald .status-badge {
       background: rgba(16, 185, 129, 0.12);
       color: var(--success);
       border: 1px solid rgba(16, 185, 129, 0.25);
     }
     .dot-live {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 8px var(--success);
+      background: #ff527d;
+      box-shadow: 0 0 10px #ff527d;
       animation: pulseDot 2s infinite;
     }
     @keyframes pulseDot {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
+      50% { opacity: 0.45; transform: scale(0.8); }
     }
 
     .btn-top {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.4rem 0.85rem;
-      border-radius: 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(255, 145, 175, 0.12);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    body.theme-miu-dark .btn-top,
+    body.theme-cosmic .btn-top,
+    body.theme-oled .btn-top,
+    body.theme-cyberpunk .btn-top,
+    body.theme-emerald .btn-top {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
     }
     .btn-top:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-1px);
+      background: #ffffff;
+      border-color: var(--primary);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 16px var(--primary-glow);
     }
     .theme-select {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.4rem 0.65rem;
-      border-radius: 10px;
-      font-size: 0.8rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
       outline: none;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(255, 145, 175, 0.12);
+      transition: border-color 0.2s ease;
+    }
+    body.theme-miu-dark .theme-select,
+    body.theme-cosmic .theme-select,
+    body.theme-oled .theme-select,
+    body.theme-cyberpunk .theme-select,
+    body.theme-emerald .theme-select {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .theme-select:focus {
+      border-color: var(--primary);
     }
 
     /* Main Grid Layout */
@@ -409,20 +541,21 @@ export function renderDashboardHtml(): string {
       }
     }
 
-    /* Glass Cards */
+    /* Kawaii Frosted Glass Cards */
     .card {
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
+      border: 2px solid var(--card-border);
+      border-radius: 28px;
       backdrop-filter: blur(24px) saturate(180%);
-      padding: 1.75rem;
-      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.12);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      padding: 1.85rem;
+      box-shadow: var(--card-shadow), inset 0 2px 4px rgba(255, 255, 255, 0.85);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
     }
     .card:hover {
       border-color: var(--card-hover-border);
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 22px 48px rgba(255, 145, 175, 0.32), inset 0 2px 4px rgba(255, 255, 255, 1);
+      transform: translateY(-2px);
     }
 
     /* Ambient Dynamic Artwork Glow Backdrop */
@@ -449,7 +582,7 @@ export function renderDashboardHtml(): string {
     .hero-media-wrapper {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1.75rem;
       position: relative;
     }
     @media (max-width: 680px) {
@@ -471,14 +604,17 @@ export function renderDashboardHtml(): string {
     .artwork {
       width: 180px;
       height: 180px;
-      border-radius: 18px;
+      border-radius: 22px;
       object-fit: cover;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 16px 36px rgba(255, 117, 151, 0.28);
+      border: 3px solid rgba(255, 255, 255, 0.85);
       position: relative;
       z-index: 3;
-      background: #1e293b;
+      background: #ffeef3;
       transition: transform 0.3s ease;
+    }
+    .artwork:hover {
+      transform: scale(1.02);
     }
     .vinyl-disc {
       position: absolute;
@@ -514,11 +650,12 @@ export function renderDashboardHtml(): string {
       animation-play-state: paused;
     }
     .vinyl-center {
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      background: var(--primary);
+      background: radial-gradient(circle, #ffffff 26%, var(--primary) 30%, #ff527d 100%);
       border: 4px solid #fff;
+      box-shadow: 0 0 10px rgba(255, 117, 151, 0.5);
       position: relative;
       z-index: 2;
     }
@@ -538,7 +675,7 @@ export function renderDashboardHtml(): string {
       transform-origin: 50px 18px;
       transition: transform 0.65s cubic-bezier(0.34, 1.3, 0.64, 1);
       pointer-events: none;
-      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6));
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.45));
     }
     .tone-arm-wrapper.playing {
       transform: rotate(18deg);
@@ -574,23 +711,23 @@ export function renderDashboardHtml(): string {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
-      background: rgba(6, 182, 212, 0.12);
-      color: var(--accent);
-      border: 1px solid rgba(6, 182, 212, 0.25);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
+      padding: 0.3rem 0.85rem;
+      border-radius: 9999px;
+      background: rgba(255, 117, 151, 0.15);
+      color: var(--primary);
+      border: 1.5px solid rgba(255, 117, 151, 0.3);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.65rem;
     }
     .track-title {
       font-family: var(--font-display);
-      font-size: 1.85rem;
+      font-size: 1.95rem;
       font-weight: 800;
       line-height: 1.25;
-      color: #fff;
+      color: var(--text-main);
       margin-bottom: 0.35rem;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -598,10 +735,17 @@ export function renderDashboardHtml(): string {
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
+    body.theme-miu-dark .track-title,
+    body.theme-cosmic .track-title,
+    body.theme-oled .track-title,
+    body.theme-cyberpunk .track-title,
+    body.theme-emerald .track-title {
+      color: #fff;
+    }
     .track-artist {
-      font-size: 1.1rem;
-      color: var(--accent);
-      font-weight: 600;
+      font-size: 1.15rem;
+      color: var(--primary);
+      font-weight: 700;
       margin-bottom: 1.25rem;
     }
 
@@ -615,32 +759,34 @@ export function renderDashboardHtml(): string {
     .progress-bar-wrapper {
       position: relative;
       width: 100%;
-      height: 10px;
-      background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0px, rgba(255, 255, 255, 0.06) 2px, rgba(255, 255, 255, 0.12) 2px, rgba(255, 255, 255, 0.12) 4px);
+      height: 12px;
+      background: repeating-linear-gradient(90deg, rgba(255, 182, 193, 0.25) 0px, rgba(255, 182, 193, 0.25) 2px, rgba(255, 182, 193, 0.55) 2px, rgba(255, 182, 193, 0.55) 4px);
+      border: 1px solid rgba(255, 182, 193, 0.4);
       border-radius: 9999px;
       cursor: pointer;
       overflow: visible;
       transition: height 0.2s ease;
     }
     .progress-bar-wrapper:hover {
-      height: 12px;
+      height: 14px;
     }
     .hover-time-badge {
       position: absolute;
-      top: -28px;
+      top: -30px;
       transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid var(--accent);
+      background: #4a2835;
+      border: 1.5px solid var(--primary);
       color: #fff;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-size: 0.72rem;
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-size: 0.75rem;
       font-family: var(--font-mono);
+      font-weight: 700;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.15s ease;
       white-space: nowrap;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 12px rgba(255, 117, 151, 0.35);
       z-index: 10;
     }
     .hover-time-badge.visible {
@@ -657,15 +803,16 @@ export function renderDashboardHtml(): string {
     }
     .progress-scrubber-handle {
       position: absolute;
-      right: -6px;
+      right: -7px;
       top: 50%;
       transform: translateY(-50%) scale(0);
-      width: 14px;
-      height: 14px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       background: #fff;
-      box-shadow: 0 0 8px rgba(0,0,0,0.6);
-      transition: transform 0.2s;
+      border: 3px solid var(--primary);
+      box-shadow: 0 2px 8px rgba(255, 117, 151, 0.6);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .progress-bar-wrapper:hover .progress-scrubber-handle {
       transform: translateY(-50%) scale(1);
@@ -674,9 +821,9 @@ export function renderDashboardHtml(): string {
       display: flex;
       justify-content: space-between;
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
-      font-weight: 500;
+      font-weight: 700;
     }
 
     /* Player Controls Bar */
@@ -687,49 +834,65 @@ export function renderDashboardHtml(): string {
       gap: 1.5rem;
       margin-top: 1.25rem;
       padding-top: 1.25rem;
-      border-top: 1px solid var(--card-border);
+      border-top: 2px solid var(--card-border);
       flex-wrap: wrap;
     }
     .primary-controls {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.15rem;
     }
     .ctrl-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid var(--card-border);
       color: var(--text-main);
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 12px rgba(255, 145, 175, 0.16);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    body.theme-miu-dark .ctrl-btn,
+    body.theme-cosmic .ctrl-btn,
+    body.theme-oled .ctrl-btn,
+    body.theme-cyberpunk .ctrl-btn,
+    body.theme-emerald .ctrl-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
     }
     .ctrl-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: scale(1.08);
-      color: #fff;
+      background: #ffffff;
+      border-color: var(--primary);
+      transform: scale(1.12) translateY(-2px);
+      color: var(--primary);
+      box-shadow: 0 8px 20px var(--primary-glow);
+    }
+    .ctrl-btn:active {
+      transform: scale(0.95);
     }
     .ctrl-btn.active {
-      color: var(--accent);
-      border-color: var(--accent);
-      background: rgba(6, 182, 212, 0.15);
+      color: #fff;
+      border-color: var(--primary);
+      background: var(--primary);
+      box-shadow: 0 4px 16px var(--primary-glow);
     }
     .ctrl-btn-play {
-      width: 60px;
-      height: 60px;
+      width: 66px;
+      height: 66px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       color: #fff;
-      border: none;
-      box-shadow: 0 8px 24px var(--primary-glow);
+      border: 3px solid #fff;
+      box-shadow: 0 10px 28px rgba(255, 117, 151, 0.45);
     }
     .ctrl-btn-play:hover {
-      transform: scale(1.1);
-      box-shadow: 0 10px 30px var(--accent-glow);
+      transform: scale(1.12) translateY(-2px);
+      box-shadow: 0 14px 34px rgba(255, 82, 125, 0.6);
+      color: #fff;
     }
 
     /* Volume Slider */
@@ -740,33 +903,47 @@ export function renderDashboardHtml(): string {
       color: var(--text-muted);
       font-size: 0.85rem;
       font-family: var(--font-mono);
+      font-weight: 700;
     }
     .volume-slider {
       -webkit-appearance: none;
       width: 110px;
-      height: 6px;
+      height: 7px;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 182, 193, 0.4);
       outline: none;
       cursor: pointer;
     }
     .volume-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
-      background: var(--accent);
+      background: var(--primary);
+      border: 2px solid #fff;
       cursor: pointer;
-      box-shadow: 0 0 6px var(--accent-glow);
+      box-shadow: 0 2px 6px var(--primary-glow);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .volume-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
     }
 
     /* Visualizer Canvas */
     .visualizer-box {
       margin-top: 1rem;
-      border-radius: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.65);
+      border: 2px solid var(--card-border);
+      padding: 0.5rem;
+      box-shadow: inset 0 2px 6px rgba(255, 145, 175, 0.1);
+    }
+    body.theme-miu-dark .visualizer-box,
+    body.theme-cosmic .visualizer-box,
+    body.theme-oled .visualizer-box,
+    body.theme-cyberpunk .visualizer-box,
+    body.theme-emerald .visualizer-box {
       background: rgba(0, 0, 0, 0.35);
-      border: 1px solid var(--card-border);
-      padding: 0.4rem;
     }
     #audioVisualizer {
       width: 100%;
@@ -783,28 +960,43 @@ export function renderDashboardHtml(): string {
     }
     .lyrics-title {
       font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 700;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
+    body.theme-miu-dark .lyrics-title,
+    body.theme-cosmic .lyrics-title,
+    body.theme-oled .lyrics-title,
+    body.theme-cyberpunk .lyrics-title,
+    body.theme-emerald .lyrics-title {
+      color: #fff;
+    }
     .lyrics-box {
       height: 340px;
       overflow-y: auto;
-      border-radius: 14px;
-      background: rgba(0, 0, 0, 0.28);
-      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.65);
+      border: 2px solid var(--card-border);
       padding: 1.5rem;
       position: relative;
       scroll-behavior: smooth;
     }
+    body.theme-miu-dark .lyrics-box,
+    body.theme-cosmic .lyrics-box,
+    body.theme-oled .lyrics-box,
+    body.theme-cyberpunk .lyrics-box,
+    body.theme-emerald .lyrics-box {
+      background: rgba(0, 0, 0, 0.28);
+    }
     .lyrics-line {
-      padding: 0.65rem 1rem;
-      border-radius: 12px;
+      padding: 0.75rem 1.15rem;
+      border-radius: 14px;
       font-size: 1.05rem;
       color: var(--text-dim);
-      font-weight: 500;
+      font-weight: 600;
       line-height: 1.5;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
@@ -813,30 +1005,37 @@ export function renderDashboardHtml(): string {
     }
     .lyrics-line:hover {
       color: var(--text-main);
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 117, 151, 0.1);
       filter: blur(0);
-      opacity: 0.9;
+      opacity: 0.95;
     }
     .lyrics-line.active {
-      color: #fff;
+      color: var(--text-main);
       font-family: var(--font-display);
       font-weight: 800;
       font-size: 1.45rem;
-      background: linear-gradient(90deg, rgba(99, 102, 241, 0.28), rgba(6, 182, 212, 0.16));
-      border-left: 4px solid var(--accent);
+      background: linear-gradient(90deg, rgba(255, 117, 151, 0.24), rgba(255, 148, 178, 0.12));
+      border-left: 5px solid var(--primary);
       transform: scale(1.025);
       transform-origin: left;
-      text-shadow: 0 0 22px var(--accent-glow);
+      text-shadow: 0 0 16px var(--primary-glow);
       filter: blur(0);
       opacity: 1;
       position: relative;
       overflow: hidden;
     }
+    body.theme-miu-dark .lyrics-line.active,
+    body.theme-cosmic .lyrics-line.active,
+    body.theme-oled .lyrics-line.active,
+    body.theme-cyberpunk .lyrics-line.active,
+    body.theme-emerald .lyrics-line.active {
+      color: #fff;
+    }
     .lyrics-line.active::after {
       content: '';
       position: absolute;
       top: 0; left: -100%; width: 50%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
       animation: lyricShimmer 2.2s infinite;
     }
     @keyframes lyricShimmer {
@@ -860,13 +1059,21 @@ export function renderDashboardHtml(): string {
     }
     .queue-title {
       font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    body.theme-miu-dark .queue-title,
+    body.theme-cosmic .queue-title,
+    body.theme-oled .queue-title,
+    body.theme-cyberpunk .queue-title,
+    body.theme-emerald .queue-title {
+      color: #fff;
     }
     .queue-list {
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.65rem;
       max-height: 380px;
       overflow-y: auto;
       padding-right: 4px;
@@ -875,35 +1082,59 @@ export function renderDashboardHtml(): string {
       display: flex;
       align-items: center;
       gap: 0.85rem;
-      padding: 0.65rem 0.85rem;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      transition: all 0.2s ease;
+      padding: 0.75rem 1rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1.5px solid rgba(255, 182, 193, 0.45);
+      box-shadow: 0 2px 8px rgba(255, 145, 175, 0.08);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    body.theme-miu-dark .queue-item,
+    body.theme-cosmic .queue-item,
+    body.theme-oled .queue-item,
+    body.theme-cyberpunk .queue-item,
+    body.theme-emerald .queue-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
     .queue-item:hover {
-      background: rgba(255, 255, 255, 0.07);
-      border-color: rgba(255, 255, 255, 0.1);
-      transform: translateX(3px);
+      background: #ffffff;
+      border-color: var(--primary);
+      transform: translateX(4px);
+      box-shadow: 0 4px 14px rgba(255, 145, 175, 0.2);
     }
     .queue-idx {
       font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-dim);
-      min-width: 22px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--primary);
+      background: rgba(255, 117, 151, 0.15);
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
     .queue-info {
       flex: 1;
       min-width: 0;
     }
     .queue-item-title {
-      font-weight: 600;
-      font-size: 0.88rem;
-      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    body.theme-miu-dark .queue-item-title,
+    body.theme-cosmic .queue-item-title,
+    body.theme-oled .queue-item-title,
+    body.theme-cyberpunk .queue-item-title,
+    body.theme-emerald .queue-item-title {
+      color: #fff;
     }
     .queue-item-sub {
       font-size: 0.75rem;
@@ -915,66 +1146,85 @@ export function renderDashboardHtml(): string {
     .sfx-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.55rem;
-      margin-top: 0.6rem;
+      gap: 0.65rem;
+      margin-top: 0.75rem;
     }
     .sfx-btn {
-      padding: 0.55rem 0.5rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
+      padding: 0.75rem 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 2px solid var(--card-border);
       color: var(--text-main);
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.35rem;
-      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      gap: 0.4rem;
+      box-shadow: 0 4px 12px rgba(255, 145, 175, 0.12);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    body.theme-miu-dark .sfx-btn,
+    body.theme-cosmic .sfx-btn,
+    body.theme-oled .sfx-btn,
+    body.theme-cyberpunk .sfx-btn,
+    body.theme-emerald .sfx-btn {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
     }
     .sfx-btn:hover {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       border-color: var(--primary);
       color: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px var(--primary-glow);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 20px var(--primary-glow);
     }
     .sfx-btn:active {
-      transform: scale(0.96);
+      transform: scale(0.95);
     }
 
     /* Stats Grid */
     .stats-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-      margin-top: 0.75rem;
+      gap: 0.85rem;
+      margin-top: 0.85rem;
     }
     .stat-card {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 0.85rem;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.75);
+      padding: 1rem;
+      border-radius: 20px;
+      border: 2px solid var(--card-border);
+      box-shadow: 0 4px 14px rgba(255, 145, 175, 0.1);
+    }
+    body.theme-miu-dark .stat-card,
+    body.theme-cosmic .stat-card,
+    body.theme-oled .stat-card,
+    body.theme-cyberpunk .stat-card,
+    body.theme-emerald .stat-card {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.06);
     }
     .stat-val {
       font-family: var(--font-display);
-      font-size: 1.45rem;
+      font-size: 1.55rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--primary);
       line-height: 1.2;
     }
     .stat-lbl {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
-      margin-top: 2px;
+      font-weight: 600;
+      margin-top: 3px;
     }
 
     /* Fullscreen Karaoke Overlay */
     .karaoke-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(5, 8, 16, 0.94);
+      background: rgba(74, 40, 53, 0.95);
       backdrop-filter: blur(30px);
       z-index: 2000;
       display: none;
@@ -989,7 +1239,7 @@ export function renderDashboardHtml(): string {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 2px solid rgba(255, 182, 193, 0.35);
       padding-bottom: 1rem;
     }
     .karaoke-content {
@@ -1001,17 +1251,17 @@ export function renderDashboardHtml(): string {
     }
     .karaoke-line {
       font-family: var(--font-display);
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 700;
-      color: var(--text-dim);
+      color: #ffd1dc;
       padding: 1.25rem 0;
       transition: all 0.35s ease;
       cursor: pointer;
     }
     .karaoke-line.active {
-      font-size: 3rem;
+      font-size: 3.2rem;
       font-weight: 800;
-      color: #fff;
+      color: #ffffff;
       transform: scale(1.05);
       text-shadow: 0 0 35px var(--accent-glow);
     }
@@ -1022,22 +1272,22 @@ export function renderDashboardHtml(): string {
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%) translateY(60px);
-      background: rgba(15, 23, 42, 0.92);
-      border: 1px solid var(--accent);
+      background: rgba(74, 40, 53, 0.95);
+      border: 2px solid var(--primary);
       color: #fff;
-      padding: 0.65rem 1.25rem;
+      padding: 0.75rem 1.45rem;
       border-radius: 9999px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      backdrop-filter: blur(12px);
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(255, 117, 151, 0.4);
+      backdrop-filter: blur(14px);
       z-index: 3000;
       opacity: 0;
       pointer-events: none;
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.55rem;
     }
     .toast-pill.show {
       transform: translateX(-50%) translateY(0);
@@ -1049,8 +1299,8 @@ export function renderDashboardHtml(): string {
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(12px);
+      background: rgba(74, 40, 53, 0.7);
+      backdrop-filter: blur(14px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -1061,13 +1311,13 @@ export function renderDashboardHtml(): string {
     }
     .modal-card {
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 2.25rem;
+      border: 2px solid var(--card-border);
+      border-radius: 30px;
+      padding: 2.5rem;
       max-width: 440px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 25px 60px rgba(255, 145, 175, 0.35);
       animation: modalScale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     @keyframes modalScale {
@@ -1077,26 +1327,27 @@ export function renderDashboardHtml(): string {
     .qr-container {
       background: #ffffff;
       padding: 16px;
-      border-radius: 18px;
+      border-radius: 22px;
       display: inline-block;
       margin: 1.25rem 0;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 25px rgba(255, 145, 175, 0.25);
+      border: 2px solid var(--card-border);
     }
 
     /* Scrollbars */
     ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
     }
     ::-webkit-scrollbar-track {
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 182, 193, 0.6);
       border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: var(--primary);
     }
   </style>
 </head>
@@ -1106,6 +1357,20 @@ export function renderDashboardHtml(): string {
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
     <div class="glow-orb orb-3"></div>
+  </div>
+
+  <!-- Kawaii Floating Particles Background -->
+  <div class="kawaii-particles" aria-hidden="true">
+    <span class="particle p-1">🌸</span>
+    <span class="particle p-2">✨</span>
+    <span class="particle p-3">🎀</span>
+    <span class="particle p-4">💖</span>
+    <span class="particle p-5">🐇</span>
+    <span class="particle p-6">🌸</span>
+    <span class="particle p-7">⭐</span>
+    <span class="particle p-8">🎀</span>
+    <span class="particle p-9">✨</span>
+    <span class="particle p-10">♪</span>
   </div>
 
   <!-- Header -->
@@ -1122,8 +1387,8 @@ export function renderDashboardHtml(): string {
 
     <!-- Quick Search / Play input -->
     <div class="top-search-bar">
-      <input type="text" id="topSearchInput" class="search-input" placeholder="Cari lagu atau paste link YouTube / Spotify..." />
-      <button id="btnTopSearch" class="search-submit-btn" title="Putar Lagu">
+      <input type="text" id="topSearchInput" class="search-input" placeholder="Cari lagu atau paste link YouTube / Spotify... 🍰" />
+      <button id="btnTopSearch" class="search-submit-btn" title="Putar Lagu Manis">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <path d="M8 5v14l11-7z"/>
         </svg>
@@ -1138,23 +1403,24 @@ export function renderDashboardHtml(): string {
           <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
           <line x1="12" x2="12" y1="19" y2="22"/>
         </svg>
-        Karaoke
+        🎤 Karaoke
       </button>
 
-      <button id="btnOpenQrModal" class="btn-top" style="color: var(--accent); border-color: rgba(6,182,212,0.3);">
+      <button id="btnOpenQrModal" class="btn-top" style="color: var(--primary); border-color: rgba(255,117,151,0.4);">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
           <path d="M12 18h.01"/>
         </svg>
-        Remote HP
+        📱 Remote HP
       </button>
 
       <select id="themeSelector" class="theme-select">
-        <option value="default">🌸 Miu Kawaii Pink</option>
-        <option value="cosmic">Modern Cosmic</option>
-        <option value="cyberpunk">Cyberpunk Neon</option>
-        <option value="emerald">Emerald Studio</option>
-        <option value="oled">OLED Pitch Black</option>
+        <option value="default">🌸 Miu Strawberry Milk</option>
+        <option value="miu-dark">🌙 Miu Velvet Night</option>
+        <option value="cosmic">✨ Cosmic Indigo</option>
+        <option value="cyberpunk">⚡ Cyberpunk Neon</option>
+        <option value="emerald">🍃 Emerald Studio</option>
+        <option value="oled">🖤 OLED Pitch Black</option>
       </select>
 
       <div class="status-badge" id="statusBadge">
@@ -1217,7 +1483,7 @@ export function renderDashboardHtml(): string {
 
           <!-- Metadata & Details -->
           <div class="track-meta">
-            <div class="audio-specs-badge" id="specsBadge">Lossless Hi-Res • Lavalink v4 • 48kHz</div>
+            <div class="audio-specs-badge" id="specsBadge">🌸 Lossless Hi-Res • Lavalink v4 • 48kHz</div>
             <h1 class="track-title" id="trackTitle">Tidak ada lagu yang sedang diputar</h1>
             <p class="track-artist" id="trackArtist">Miu Music Bot</p>
 
@@ -1309,16 +1575,16 @@ export function renderDashboardHtml(): string {
               <line x1="16" x2="8" y1="13" y2="13"/>
               <line x1="16" x2="8" y1="17" y2="17"/>
             </svg>
-            Lirik Real-Time
+            🌸 Lirik Real-Time
           </div>
-          <span style="font-size: 0.78rem; font-weight: 600; color: var(--accent);" id="lyricsSourceBadge">
-            LRCLIB Synced Engine
+          <span style="font-size: 0.78rem; font-weight: 700; color: var(--primary);" id="lyricsSourceBadge">
+            LRCLIB Synced Engine ✨
           </span>
         </div>
 
         <div class="lyrics-box" id="lyricsBox">
-          <div style="color: var(--text-dim); text-align: center; padding-top: 6rem;">
-            Pilih lagu untuk menampilkan lirik bersinkronisasi...
+          <div style="color: var(--text-dim); text-align: center; padding-top: 6rem; font-weight: 600;">
+            🌸 Pilih lagu untuk menampilkan lirik bersinkronisasi...
           </div>
         </div>
       </div>
@@ -1329,48 +1595,48 @@ export function renderDashboardHtml(): string {
       <!-- Antrean Musik Card -->
       <div class="card">
         <div class="queue-header-row">
-          <div class="queue-title">Antrean Lagu (<span id="queueCount" style="color: var(--accent);">0</span>)</div>
-          <button class="btn-top" style="padding: 0.25rem 0.65rem;" onclick="fetchStatus()">Refresh</button>
+          <div class="queue-title">🎀 Antrean Lagu (<span id="queueCount" style="color: var(--primary);">0</span>)</div>
+          <button class="btn-top" style="padding: 0.3rem 0.75rem;" onclick="fetchStatus()">Refresh</button>
         </div>
         <div class="queue-list" id="queueList">
-          <div style="color: var(--text-dim); font-size: 0.85rem; text-align: center; padding: 2.5rem 0;">
-            Antrean kosong. Putar lagu dari search bar di atas!
+          <div style="color: var(--text-dim); font-size: 0.88rem; text-align: center; padding: 2.5rem 0; font-weight: 600;">
+            Antrean kosong. Putar lagu dari search bar di atas! 🍰
           </div>
         </div>
       </div>
 
       <!-- Quick Soundboard SFX Card -->
       <div class="card">
-        <div style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem;">
-          🔊 Quick Soundboard SFX
+        <div style="font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.2rem;">
+          🍰 Quick Soundboard SFX
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.6rem;">
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.6rem; font-weight: 600;">
           Kirim efek suara instan ke Voice Channel Discord:
         </p>
         <div class="sfx-grid">
-          <button class="sfx-btn" onclick="playSfx('airhorn')">
-            <span>🎺</span>
-            <span>Airhorn</span>
+          <button class="sfx-btn" onclick="playSfx('airhorn')" title="Airhorn">
+            <span style="font-size: 1.35rem;">🌸</span>
+            <span>Nya~ Horn</span>
           </button>
-          <button class="sfx-btn" onclick="playSfx('bruh')">
-            <span>🗿</span>
-            <span>Bruh</span>
+          <button class="sfx-btn" onclick="playSfx('bruh')" title="Bruh">
+            <span style="font-size: 1.35rem;">🎀</span>
+            <span>Bruh Yey!</span>
           </button>
-          <button class="sfx-btn" onclick="playSfx('applause')">
-            <span>👏</span>
-            <span>Applause</span>
+          <button class="sfx-btn" onclick="playSfx('applause')" title="Applause">
+            <span style="font-size: 1.35rem;">✨</span>
+            <span>Clap Ting!</span>
           </button>
-          <button class="sfx-btn" onclick="playSfx('badumtss')">
-            <span>🥁</span>
-            <span>Ba-Dum-Tss</span>
+          <button class="sfx-btn" onclick="playSfx('badumtss')" title="Ba-Dum-Tss">
+            <span style="font-size: 1.35rem;">🥁</span>
+            <span>Ba-Dum!</span>
           </button>
-          <button class="sfx-btn" onclick="playSfx('victory')">
-            <span>🏆</span>
-            <span>Victory</span>
+          <button class="sfx-btn" onclick="playSfx('victory')" title="Victory">
+            <span style="font-size: 1.35rem;">💖</span>
+            <span>Victory!</span>
           </button>
-          <button class="sfx-btn" onclick="playSfx('sadviolin')">
-            <span>🎻</span>
-            <span>Sad Violin</span>
+          <button class="sfx-btn" onclick="playSfx('sadviolin')" title="Sad Violin">
+            <span style="font-size: 1.35rem;">🐇</span>
+            <span>Violin Hop</span>
           </button>
         </div>
       </div>
@@ -1981,7 +2247,7 @@ export function renderDashboardHtml(): string {
     });
 
     function applyTheme(theme) {
-      document.body.classList.remove('theme-oled', 'theme-cyberpunk', 'theme-emerald', 'theme-cosmic');
+      document.body.classList.remove('theme-oled', 'theme-cyberpunk', 'theme-emerald', 'theme-cosmic', 'theme-miu-dark');
       if (theme !== 'default') {
         document.body.classList.add('theme-' + theme);
       }
