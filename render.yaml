@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: miu-music
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: sin
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: GUILD_ID
+        sync: false
+      - key: LAVALINK_HOST
+        value: lava-v4.ajieblogs.eu.org
+      - key: LAVALINK_PORT
+        value: 443
+      - key: LAVALINK_PASSWORD
+        value: https://dsc.gg/ajielavalink
+      - key: LAVALINK_SECURE
+        value: "true"
+      - key: MULTI_SERVER_MODE
+        value: "true"
