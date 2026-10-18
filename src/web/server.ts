@@ -292,6 +292,20 @@ export function startDashboardServer(
         diag.lavalinkHttp = { error: err?.message ?? String(err) };
       }
 
+      try {
+        diag.lavalinkNodes = lavalink?.nodeManager?.nodes
+          ? Array.from(lavalink.nodeManager.nodes.values()).map((n) => ({
+              id: n.id,
+              host: n.options.host,
+              port: n.options.port,
+              connected: n.connected,
+              stats: n.stats,
+            }))
+          : [];
+      } catch (err: any) {
+        diag.lavalinkNodes = { error: err?.message ?? String(err) };
+      }
+
       if (!client.isReady() && (client.ws?.status === 3 || client.ws?.status === 5)) {
         console.log("[Diagnostic] Memanggil ulang client.login dari endpoint /api/diag...");
         client.login(envConfig.DISCORD_TOKEN).catch((err) => {

@@ -34,16 +34,36 @@ const autoLeaveTimers = new Map<string, NodeJS.Timeout>();
 export const lastNowPlayingMessages = new Map<string, { channelId: string; messageId: string }>();
 
 export function initLavalink(client: Client): LavalinkManager {
+  const primaryNode = {
+    id: "primary",
+    host: config.LAVALINK_HOST,
+    port: config.LAVALINK_PORT,
+    authorization: config.LAVALINK_PASSWORD,
+    secure: config.LAVALINK_SECURE ?? (config.LAVALINK_PORT === 443),
+    retryAmount: 10,
+    retryDelay: 3000,
+  };
+
+  const backupHost =
+    config.LAVALINK_BACKUP_HOST ||
+    (config.LAVALINK_HOST !== "lavalink.jirayu.net" ? "lavalink.jirayu.net" : "nodelink.gdjkhp.com");
+  const backupNode = {
+    id: "backup",
+    host: backupHost,
+    port: config.LAVALINK_BACKUP_PORT ?? 443,
+    authorization: config.LAVALINK_BACKUP_PASSWORD ?? "youshallnotpass",
+    secure: config.LAVALINK_BACKUP_SECURE ?? true,
+    retryAmount: 10,
+    retryDelay: 3000,
+  };
+
+  const nodes = [primaryNode];
+  if (primaryNode.host !== backupNode.host) {
+    nodes.push(backupNode);
+  }
+
   lavalink = new LavalinkManager({
-    nodes: [
-      {
-        id: "default",
-        host: config.LAVALINK_HOST,
-        port: config.LAVALINK_PORT,
-        authorization: config.LAVALINK_PASSWORD,
-        secure: config.LAVALINK_SECURE ?? (config.LAVALINK_PORT === 443),
-      },
-    ],
+    nodes,
     sendToShard: (guildId, payload) => client.guilds.cache.get(guildId)?.shard?.send(payload),
     autoSkip: true,
     client: { id: client.user?.id ?? "", username: client.user?.username ?? "" },
@@ -52,12 +72,17 @@ export function initLavalink(client: Client): LavalinkManager {
   client.on("raw", (data) => lavalink.sendRawData(data));
 
   lavalink.nodeManager.on("connect", (node) => {
-    console.log(`[Lavalink] Node ${node.id} connected successfully.`);
-    recordHealthEvent("lavalink", "ok", `Node ${node.id} connected successfully.`);
+    console.log(`[Lavalink] Node ${node.id} (${node.options.host}) connected successfully.`);
+    recordHealthEvent("lavalink", "ok", `Node ${node.id} (${node.options.host}) connected successfully.`);
+  });
+
+  lavalink.nodeManager.on("disconnect", (node, reason) => {
+    console.warn(`[Lavalink] Node ${node.id} (${node.options.host}) disconnected:`, reason);
+    recordHealthEvent("lavalink", "warn", `Node ${node.id} (${node.options.host}) disconnected: ${reason}`);
   });
 
   lavalink.nodeManager.on("error", (node, error) => {
-    console.error(`[Lavalink] Node ${node.id} error:`, error?.message ?? error);
+    console.error(`[Lavalink] Node ${node.id} (${node.options.host}) error:`, error?.message ?? error);
     recordHealthEvent("lavalink", "error", `Node ${node.id} error: ${error?.message ?? error}`);
   });
 
@@ -374,6 +399,19 @@ export async function getOrCreatePlayer(
 ): Promise<Player> {
   let player = lavalink.getPlayer(guildId);
   if (!player) {
+    // Pastikan setidaknya 1 node terhubung sebelum createPlayer
+    const availableNodes = lavalink.nodeManager.nodes.filter((n) => n.connected);
+    if (availableNodes.size === 0) {
+      console.warn("[Lavalink] Belum ada node aktif saat createPlayer. Mencoba reconnectAll dan menunggu...");
+      try {
+        await lavalink.nodeManager.reconnectAll();
+      } catch {}
+      for (let i = 0; i < 4; i++) {
+        await new Promise((res) => setTimeout(res, 500));
+        if (lavalink.nodeManager.nodes.some((n) => n.connected)) break;
+      }
+    }
+
     player = lavalink.createPlayer({
       guildId,
       voiceChannelId,
