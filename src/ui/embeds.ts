@@ -72,12 +72,12 @@ export function createNowPlayingEmbed(track: AnyTrack, player: Player): EmbedBui
 
   const bar = track.info.isStream
     ? ""
-    : `\n\n${createProgressBar(currentPos, track.info.duration || 0, 14, "🌸", "━")}\n\`[ ${formatDuration(currentPos)} / ${durationStr} ]\``;
+    : `\n\n\`${formatDuration(currentPos)}\` ${createProgressBar(currentPos, track.info.duration || 0, 10, "🌸", "━")} \`${durationStr}\``;
 
   const repeatMode = player.repeatMode ?? "off";
-  let repeatText = "Mati (Off)";
+  let repeatText = "Mati";
   if (repeatMode === "track") repeatText = "🔂 Lagu Ini";
-  else if (repeatMode === "queue") repeatText = "🔁 Semua Antrean";
+  else if (repeatMode === "queue") repeatText = "🔁 Antrean";
 
   const embed = new EmbedBuilder()
     .setColor(MIU_THEME.PRIMARY)
@@ -90,8 +90,8 @@ export function createNowPlayingEmbed(track: AnyTrack, player: Player): EmbedBui
     .setDescription(`🎤 Artis: **${track.info.author}**${bar}`)
     .addFields([
       { name: "🔊 Volume", value: `\`${player.volume}%\``, inline: true },
-      { name: "🔁 Mode Ulang", value: `\`${repeatText}\``, inline: true },
-      { name: "🎀 Sisa Antrean", value: `\`${player.queue.tracks.length} lagu\``, inline: true },
+      { name: "🔁 Ulang", value: `\`${repeatText}\``, inline: true },
+      { name: "🎀 Antrean", value: `\`${player.queue.tracks.length} lagu\``, inline: true },
     ]);
 
   if (track.info.artworkUrl) {
@@ -227,27 +227,28 @@ export function createInfoEmbed(title: string, message: string): EmbedBuilder {
 export function createNowPlayingComponents(player: Player, disabled = false): ActionRowBuilder<ButtonBuilder>[] {
   const isPaused = player.paused;
 
+  // Baris 1: Kontrol Pemutaran Inti (5 Tombol)
   const playPauseBtn = new ButtonBuilder()
     .setCustomId("btn_play_pause")
-    .setLabel(isPaused ? "Lanjutkan" : "Jeda")
-    .setEmoji(isPaused ? "▶️" : "⏸️")
+    .setLabel(isPaused ? "Putar" : "Jeda")
+    .setEmoji(isPaused ? "▶️" : "💖")
     .setStyle(isPaused ? ButtonStyle.Success : ButtonStyle.Primary)
     .setDisabled(disabled);
 
   const skipBtn = new ButtonBuilder()
     .setCustomId("btn_skip")
     .setLabel("Lewati")
-    .setEmoji("⏭️")
+    .setEmoji("🌸")
     .setStyle(ButtonStyle.Secondary)
     .setDisabled(disabled);
 
-  let loopLabel = "Loop: Off";
-  let loopEmoji = "➡️";
+  let loopLabel = "Loop";
+  let loopEmoji = "🔁";
   if (player.repeatMode === "track") {
-    loopLabel = "Loop: Lagu";
+    loopLabel = "Lagu";
     loopEmoji = "🔂";
   } else if (player.repeatMode === "queue") {
-    loopLabel = "Loop: Antrean";
+    loopLabel = "Antrean";
     loopEmoji = "🔁";
   }
 
@@ -261,14 +262,14 @@ export function createNowPlayingComponents(player: Player, disabled = false): Ac
   const shuffleBtn = new ButtonBuilder()
     .setCustomId("btn_shuffle")
     .setLabel("Acak")
-    .setEmoji("🔀")
+    .setEmoji("✨")
     .setStyle(ButtonStyle.Secondary)
     .setDisabled(disabled);
 
   const stopBtn = new ButtonBuilder()
     .setCustomId("btn_stop")
-    .setLabel("Berhenti")
-    .setEmoji("⏹️")
+    .setLabel("Stop")
+    .setEmoji("🛑")
     .setStyle(ButtonStyle.Danger)
     .setDisabled(disabled);
 
@@ -280,31 +281,47 @@ export function createNowPlayingComponents(player: Player, disabled = false): Ac
     stopBtn
   );
 
+  // Baris 2: Utilitas Suara, Lirik, dan Web Player (5 Tombol Simetris Penuh)
   const volDownBtn = new ButtonBuilder()
     .setCustomId("btn_vol_down")
-    .setLabel("Vol -10%")
+    .setLabel("Vol -")
     .setEmoji("🔉")
     .setStyle(ButtonStyle.Secondary)
     .setDisabled(disabled);
 
   const volUpBtn = new ButtonBuilder()
     .setCustomId("btn_vol_up")
-    .setLabel("Vol +10%")
+    .setLabel("Vol +")
     .setEmoji("🔊")
     .setStyle(ButtonStyle.Secondary)
     .setDisabled(disabled);
 
   const queueBtn = new ButtonBuilder()
     .setCustomId("btn_queue")
-    .setLabel("Lihat Antrean")
+    .setLabel("Antrean")
     .setEmoji("📜")
     .setStyle(ButtonStyle.Secondary)
     .setDisabled(disabled);
 
+  const lyricsBtn = new ButtonBuilder()
+    .setCustomId("btn_lyrics")
+    .setLabel("Lirik")
+    .setEmoji("🎤")
+    .setStyle(ButtonStyle.Secondary)
+    .setDisabled(disabled);
+
+  const webPlayerBtn = new ButtonBuilder()
+    .setLabel("Web Player")
+    .setEmoji("🎀")
+    .setStyle(ButtonStyle.Link)
+    .setURL("https://miu-music-us.onrender.com/");
+
   const row2 = new ActionRowBuilder<ButtonBuilder>().addComponents(
     volDownBtn,
     volUpBtn,
-    queueBtn
+    queueBtn,
+    lyricsBtn,
+    webPlayerBtn
   );
 
   return [row1, row2];

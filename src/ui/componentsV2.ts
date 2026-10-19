@@ -43,58 +43,71 @@ export function createNowPlayingContainer(
 
   container.addSeparatorComponents(new SeparatorBuilder());
 
+  const isPaused = player.paused;
+
   const row1 = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId("btn_play_pause")
-      .setLabel(player.paused ? "Lanjutkan" : "Jeda")
-      .setStyle(player.paused ? ButtonStyle.Success : ButtonStyle.Primary)
-      .setEmoji(player.paused ? "▶️" : "⏸️")
+      .setLabel(isPaused ? "Putar" : "Jeda")
+      .setStyle(isPaused ? ButtonStyle.Success : ButtonStyle.Primary)
+      .setEmoji(isPaused ? "▶️" : "💖")
       .setDisabled(disabled),
     new ButtonBuilder()
       .setCustomId("btn_skip")
       .setLabel("Lewati")
       .setStyle(ButtonStyle.Secondary)
-      .setEmoji("⏭️")
+      .setEmoji("🌸")
       .setDisabled(disabled),
     new ButtonBuilder()
       .setCustomId("btn_loop")
-      .setLabel(`Loop (${(player.repeatMode ?? "off").toUpperCase()})`)
+      .setLabel(player.repeatMode === "track" ? "Lagu" : player.repeatMode === "queue" ? "Antrean" : "Loop")
       .setStyle(player.repeatMode !== "off" ? ButtonStyle.Success : ButtonStyle.Secondary)
-      .setEmoji("🔁")
+      .setEmoji(player.repeatMode === "track" ? "🔂" : "🔁")
       .setDisabled(disabled),
     new ButtonBuilder()
       .setCustomId("btn_shuffle")
       .setLabel("Acak")
       .setStyle(ButtonStyle.Secondary)
-      .setEmoji("🔀")
+      .setEmoji("✨")
       .setDisabled(disabled),
     new ButtonBuilder()
       .setCustomId("btn_stop")
-      .setLabel("Berhenti")
+      .setLabel("Stop")
       .setStyle(ButtonStyle.Danger)
-      .setEmoji("⏹️")
+      .setEmoji("🛑")
       .setDisabled(disabled)
   );
 
   const row2 = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId("btn_vol_down")
-      .setLabel("Vol -10")
+      .setLabel("Vol -")
       .setStyle(ButtonStyle.Secondary)
       .setEmoji("🔉")
       .setDisabled(disabled),
     new ButtonBuilder()
       .setCustomId("btn_vol_up")
-      .setLabel("Vol +10")
+      .setLabel("Vol +")
       .setStyle(ButtonStyle.Secondary)
       .setEmoji("🔊")
       .setDisabled(disabled),
     new ButtonBuilder()
       .setCustomId("btn_queue")
-      .setLabel("Lihat Antrean")
-      .setStyle(ButtonStyle.Primary)
+      .setLabel("Antrean")
+      .setStyle(ButtonStyle.Secondary)
       .setEmoji("📜")
-      .setDisabled(disabled)
+      .setDisabled(disabled),
+    new ButtonBuilder()
+      .setCustomId("btn_lyrics")
+      .setLabel("Lirik")
+      .setStyle(ButtonStyle.Secondary)
+      .setEmoji("🎤")
+      .setDisabled(disabled),
+    new ButtonBuilder()
+      .setLabel("Web Player")
+      .setStyle(ButtonStyle.Link)
+      .setEmoji("🎀")
+      .setURL("https://miu-music-us.onrender.com/")
   );
 
   container.addActionRowComponents(row1, row2);

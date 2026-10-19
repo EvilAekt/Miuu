@@ -1,4 +1,4 @@
-import type { Interaction, GuildMember } from "discord.js";
+import { type Interaction, type GuildMember, EmbedBuilder } from "discord.js";
 import { commandMap } from "../commands/index.js";
 import { lavalink } from "../player/lavalink.js";
 import {
@@ -7,9 +7,12 @@ import {
   createNowPlayingComponents,
   createQueueEmbed,
   createQueueComponents,
+  MIU_THEME,
+  getBotAvatarUrl,
 } from "../ui/embeds.js";
 import { incrementCommandUsage, setMatchOverride, setCachedTrack, setTrackVolumePref } from "../db/index.js";
 import { isGuildAllowed } from "../guilds/guildManager.js";
+import { fetchLyrics } from "../lyrics/lyricsService.js";
 
 export async function onInteractionCreate(interaction: Interaction): Promise<void> {
   // 1. Handle Autocomplete Interactions
@@ -159,6 +162,45 @@ export async function onInteractionCreate(interaction: Interaction): Promise<voi
         const embed = createQueueEmbed(player, page);
         const components = totalPages > 1 ? createQueueComponents(page, totalPages) : [];
         await interaction.reply({ embeds: [embed], components, ephemeral: true });
+        return;
+      }
+
+      if (customId === "btn_lyrics") {
+        const cur = player.queue.current;
+        if (!cur) {
+          await interaction.reply({
+            content: "🌸 Tidak ada lagu yang sedang diputar saat ini.",
+            ephemeral: true,
+          });
+          return;
+        }
+
+        await interaction.deferReply({ ephemeral: true });
+
+        try {
+          const lyricsData = await fetchLyrics(cur.info.title, cur.info.author);
+          if (lyricsData && (lyricsData.plainLyrics || (lyricsData.syncedLines && lyricsData.syncedLines.length > 0))) {
+            const rawLyrics = lyricsData.plainLyrics || lyricsData.syncedLines.map((l) => l.text).filter(Boolean).join("\n");
+            const truncated = rawLyrics.length > 3900 ? rawLyrics.slice(0, 3900) + "\n\n*(Lirik terpotong karena batas karakter Discord...)*" : rawLyrics;
+
+            const lyricsEmbed = new EmbedBuilder()
+              .setColor(MIU_THEME.PRIMARY)
+              .setAuthor({ name: "🌸 Miu Synced Lyrics ~", iconURL: getBotAvatarUrl() })
+              .setTitle(`🎤 ${cur.info.title}`)
+              .setDescription(`Artis: **${cur.info.author}**\n\n${truncated}`)
+              .setFooter({ text: "Sumber: LRCLIB Open Database • Miu Music 🎀", iconURL: getBotAvatarUrl() });
+
+            await interaction.editReply({ embeds: [lyricsEmbed] });
+          } else {
+            await interaction.editReply({
+              content: `🌸 Maaf, lirik untuk lagu **${cur.info.title}** belum ditemukan di database terbuka.`,
+            });
+          }
+        } catch (err) {
+          await interaction.editReply({
+            content: "⚠️ Gagal memuat lirik saat ini.",
+          });
+        }
         return;
       }
 
