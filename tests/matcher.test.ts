@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { calculateMatchScore } from "../src/matching/matcher.js";
+import { calculateMatchScore, cleanTitleForSearch } from "../src/matching/matcher.js";
 
 test("calculateMatchScore - official audio and topic bonuses", () => {
   const spotify = {
@@ -55,3 +55,58 @@ test("calculateMatchScore - penalty for duration discrepancy", () => {
   assert.ok(result.reason.some((r) => r.includes("Selisih durasi > 60s")));
   assert.ok(result.score <= 45, `Expected score <= 45, got ${result.score}`);
 });
+
+test("cleanTitleForSearch - cleans noise metadata and featured artists correctly", () => {
+  assert.equal(cleanTitleForSearch("Indecision (feat. Daniel Caesar)"), "Indecision");
+  assert.equal(cleanTitleForSearch("Numb / Encore [ft. JAY-Z]"), "Numb / Encore");
+  assert.equal(cleanTitleForSearch("Creep - Remastered"), "Creep");
+  assert.equal(cleanTitleForSearch("Hotel California (Live / Remastered 2013)"), "Hotel California");
+  assert.equal(cleanTitleForSearch("Song Name (Official Music Video)"), "Song Name");
+  assert.equal(cleanTitleForSearch("Simple Song"), "Simple Song");
+});
+
+test("sfxManager - smart resume records interruption and restores correctly", async () => {
+  const { playSfxWithSmartResume, handleSfxTrackEnd, getSfxInterruption } = await import("../src/player/sfxManager.js");
+
+  const mockOriginalTrack: any = {
+    info: { title: "Radiohead - Creep", identifier: "yt-creep", author: "Radiohead", duration: 239000 },
+  };
+  const mockSfxTrack: any = {
+    info: { title: "Airhorn SFX", identifier: "sfx-airhorn", author: "Miu SFX", duration: 3000 },
+  };
+
+  let playOptionsCalledWith: any = null;
+  let skipCalled = false;
+
+  const mockPlayer: any = {
+    guildId: "guild-sfx-test",
+    playing: true,
+    position: 45000,
+    queue: {
+      current: mockOriginalTrack,
+      tracks: [],
+    },
+    skip: async () => { skipCalled = true; },
+    play: async (opts?: any) => { playOptionsCalledWith = opts; },
+  };
+
+  // 1. Panggil playSfxWithSmartResume
+  const res = await playSfxWithSmartResume(mockPlayer, mockSfxTrack);
+  assert.equal(res.success, true);
+  assert.equal(res.resumed, true);
+  assert.equal(skipCalled, true);
+  assert.equal(mockPlayer.queue.tracks[0].info.identifier, "sfx-airhorn");
+
+  const interruption = getSfxInterruption("guild-sfx-test");
+  assert.ok(interruption);
+  assert.equal(interruption.originalTrack.info.title, "Radiohead - Creep");
+  assert.equal(interruption.position, 44800); // 45000 - 200ms backtrack
+
+  // 2. Simulasi SFX selesai (trackEnd)
+  const handled = await handleSfxTrackEnd(mockPlayer, mockSfxTrack);
+  assert.equal(handled, true);
+  assert.equal(mockPlayer.queue.tracks[0].info.identifier, "yt-creep");
+  assert.equal(playOptionsCalledWith?.position, 44800);
+  assert.equal(getSfxInterruption("guild-sfx-test"), undefined);
+});
+

@@ -2,6 +2,7 @@
 import { SlashCommandBuilder, type ChatInputCommandInteraction, type GuildMember } from "discord.js";
 import type { Command } from "./types.js";
 import { lavalink } from "../player/lavalink.js";
+import { playSfxWithSmartResume } from "../player/sfxManager.js";
 import { createSuccessEmbed, createErrorEmbed } from "../ui/embeds.js";
 
 export const SFX_PRESETS: Record<string, { label: string; query: string }> = {
@@ -86,17 +87,14 @@ export const sfxCommand: Command = {
     }
 
     const sfxTrack = res.tracks[0];
-    // Masukkan ke posisi terdepan antrean agar langsung diputar selanjutnya atau segera
-    if (player.playing) {
-      player.queue.tracks.unshift(sfxTrack);
-      await player.skip();
-    } else {
-      await player.queue.add(sfxTrack);
-      await player.play();
-    }
+    const { resumed } = await playSfxWithSmartResume(player, sfxTrack);
+
+    const descMsg = resumed
+      ? `Berhasil memutar efek suara: **${sfx.label}** ✨\n*(Lagu yang sedang berjalan dijeda sebentar dan otomatis lanjut kembali)*`
+      : `Berhasil memutar efek suara: **${sfx.label}** ✨`;
 
     await interaction.editReply({
-      embeds: [createSuccessEmbed("Memutar SFX 🔊", `Berhasil memutar efek suara: **${sfx.label}**`)],
+      embeds: [createSuccessEmbed("Memutar SFX 🔊", descMsg)],
     });
   },
 };

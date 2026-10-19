@@ -93,6 +93,21 @@ export function calculateMatchScore(
 }
 
 /**
+ * Membersihkan metadata bising dari judul lagu untuk pencarian YouTube yang lebih akurat
+ * Misalnya: "Indecision (feat. Daniel Caesar)" -> "Indecision"
+ */
+export function cleanTitleForSearch(title: string): string {
+  if (!title) return "";
+  return title
+    .replace(/\s*[\(\[](?:feat|ft)\.?\s+[^\)\]]+[\)\]]/gi, "")
+    .replace(/\s*[\(\[](?:official\s+(?:video|audio|music\s+video)|lyric\s+video|audio|visualizer)[\)\]]/gi, "")
+    .replace(/\s*[\(\[][^\)\]]*(?:remastered|deluxe|bonus\s+track|expanded|anniversary|radio\s+edit|live)[^\)\]]*[\)\]]/gi, "")
+    .replace(/\s*-\s*remastered\s*\d*/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+/**
  * Mencari kandidat YouTube terbaik untuk Spotify track dengan mempertimbangkan override, cache, dan skor.
  */
 export async function matchSpotifyToYouTube(
@@ -131,27 +146,47 @@ export async function matchSpotifyToYouTube(
   }
 
   // 3. Cari beberapa kandidat dari YouTube Music / YouTube Search
-  const query = `${item.artist} - ${item.title}`;
   let rawTracks: (Track | UnresolvedTrack)[] = [];
 
-  try {
-    const resMusic = await player.search({ query, source: "ytmsearch" }, requester);
-    if (resMusic && resMusic.tracks.length > 0) {
-      rawTracks.push(...resMusic.tracks.slice(0, 5));
-    }
-  } catch {}
+  const performSearch = async (searchQuery: string) => {
+    try {
+      const resMusic = await player.search({ query: searchQuery, source: "ytmsearch" }, requester);
+      if (resMusic && resMusic.tracks.length > 0) {
+        rawTracks.push(...resMusic.tracks.slice(0, 5));
+      }
+    } catch {}
 
-  try {
-    const resYt = await player.search({ query, source: "ytsearch" }, requester);
-    if (resYt && resYt.tracks.length > 0) {
-      // Masukkan kandidat unik
-      for (const t of resYt.tracks.slice(0, 5)) {
-        if (!rawTracks.some((r) => r.info.identifier === t.info.identifier)) {
-          rawTracks.push(t);
+    try {
+      const resYt = await player.search({ query: searchQuery, source: "ytsearch" }, requester);
+      if (resYt && resYt.tracks.length > 0) {
+        for (const t of resYt.tracks.slice(0, 5)) {
+          if (!rawTracks.some((r) => r.info.identifier === t.info.identifier)) {
+            rawTracks.push(t);
+          }
         }
       }
+    } catch {}
+  };
+
+  // 3a. Cari dengan query standar: "Artist - Title"
+  const standardQuery = `${item.artist} - ${item.title}`;
+  await performSearch(standardQuery);
+
+  // 3b. Smart Clean Search Fallback: Jika belum ada hasil dan judul memiliki noise
+  if (rawTracks.length === 0) {
+    const cleanedTitle = cleanTitleForSearch(item.title);
+    if (cleanedTitle && cleanedTitle !== item.title) {
+      const cleanedQuery = `${item.artist} - ${cleanedTitle}`;
+      await performSearch(cleanedQuery);
     }
-  } catch {}
+  }
+
+  // 3c. Fallback kedua: format judul + artis tanpa strip
+  if (rawTracks.length === 0) {
+    const cleanedTitle = cleanTitleForSearch(item.title) || item.title;
+    const looseQuery = `${cleanedTitle} ${item.artist}`.trim();
+    await performSearch(looseQuery);
+  }
 
   if (rawTracks.length === 0) {
     return { bestTrack: null, candidates: [] };

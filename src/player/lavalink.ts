@@ -28,6 +28,7 @@ import { createNowPlayingEmbed, createNowPlayingComponents, createErrorEmbed, se
 import { createNowPlayingPayloadV2 } from "../ui/componentsV2.js";
 import { broadcastDashboardEvent, getCompleteDashboardStatus } from "../web/server.js";
 import { prefetchTrackLyrics } from "../lyrics/lyricsService.js";
+import { isSfxTrack, handleSfxTrackEnd, clearSfxInterruption } from "./sfxManager.js";
 
 export let lavalink: LavalinkManager;
 const autoLeaveTimers = new Map<string, NodeJS.Timeout>();
@@ -91,6 +92,14 @@ export function initLavalink(client: Client): LavalinkManager {
     if (!track) return;
     // Cancel any pending auto-leave timer since music is playing
     cancelAutoLeave(player.guildId);
+
+    // Jika track adalah SFX, jangan kirim embed Now Playing baru atau simpan ke riwayat lagu
+    if (isSfxTrack(track)) {
+      try {
+        broadcastDashboardEvent("track_change", getCompleteDashboardStatus(client));
+      } catch {}
+      return;
+    }
 
     // Real-Time Broadcast Status ke Web Dashboard via SSE (< 5ms latency)
     try {
@@ -192,6 +201,12 @@ export function initLavalink(client: Client): LavalinkManager {
     try {
       broadcastDashboardEvent("track_change", getCompleteDashboardStatus(client));
     } catch {}
+
+    // Smart Resume: Jika track SFX selesai, otomatis kembalikan dan lanjutkan lagu sebelumnya
+    const sfxHandled = await handleSfxTrackEnd(player, track);
+    if (sfxHandled) {
+      return;
+    }
     const requesterId = (track.requester as any)?.id;
     const author = track.info?.author || "Unknown";
     const title = track.info?.title || "Unknown";
@@ -347,6 +362,7 @@ export function initLavalink(client: Client): LavalinkManager {
 
     console.log(`[Lavalink] Antrean guild ${player.guildId} telah selesai. Memulai auto-leave timer.`);
     clearQueueSnapshot(player.guildId);
+    clearSfxInterruption(player.guildId);
     try {
       broadcastDashboardEvent("state_change", getCompleteDashboardStatus(client));
     } catch {}

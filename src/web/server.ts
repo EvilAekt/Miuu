@@ -10,6 +10,7 @@ import { fetchLyrics, cleanTrackTitle } from "../lyrics/lyricsService.js";
 import { isMaintenanceMode } from "../config/maintenance.js";
 import { getCachedSearchResults, setCachedSearchResults } from "../player/searchCache.js";
 import { config as envConfig } from "../config/env.js";
+import { playSfxWithSmartResume } from "../player/sfxManager.js";
 import { renderDashboardHtml } from "./dashboardHtml.js";
 
 export { renderDashboardHtml };
@@ -488,14 +489,11 @@ export function startDashboardServer(
             const res = await player.search({ query: sfx.query }, client.user as any);
             if (res && res.tracks && res.tracks.length > 0) {
               const track = res.tracks[0];
-              if (player.playing) {
-                player.queue.tracks.unshift(track);
-                await player.skip();
-              } else {
-                await player.queue.add(track);
-                await player.play();
-              }
-              return sendPlayerSuccess({ success: true, message: `Memutar SFX: ${sfx.label}` });
+              const { resumed } = await playSfxWithSmartResume(player, track);
+              const message = resumed
+                ? `Memutar SFX: ${sfx.label} (Lagu dijeda sebentar & otomatis lanjut kembali)`
+                : `Memutar SFX: ${sfx.label}`;
+              return sendPlayerSuccess({ success: true, message });
             }
           }
           return sendJson({ success: false, message: "SFX tidak ditemukan atau gagal dimuat." }, 404);

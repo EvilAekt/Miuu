@@ -188,30 +188,42 @@ async function handleSpotifyInput(
   }
 
   // Multi-track Spotify (album / playlist): Resolusi Bertahap (Progressive Resolution)
-  // 1. Resolve first track immediately so music plays without waiting
-  const firstItem = result.tracks[0];
-  const firstTrack = await resolveSpotifyTrackWithCache(player, firstItem, interaction.user);
+  // 1. Pindai dan temukan lagu pertama yang valid untuk langsung diputar tanpa menunggu (Auto-Skip First Track)
+  let initialTrack: Track | UnresolvedTrack | null = null;
+  let initialItemIndex = -1;
+  let initialItem: ResolvedSpotifyItem | null = null;
 
-  if (!firstTrack) {
+  const scanLimit = Math.min(result.tracks.length, 5);
+  for (let i = 0; i < scanLimit; i++) {
+    const candidate = await resolveSpotifyTrackWithCache(player, result.tracks[i], interaction.user);
+    if (candidate) {
+      initialTrack = candidate;
+      initialItemIndex = i;
+      initialItem = result.tracks[i];
+      break;
+    }
+  }
+
+  if (!initialTrack || initialItemIndex === -1 || !initialItem) {
     await interaction.editReply({
-      embeds: [createErrorEmbed("Gagal Memuat Playlist", `Tidak dapat menemukan lagu pertama (${firstItem.title}) di YouTube.`)],
+      embeds: [createErrorEmbed("Gagal Memuat Playlist", `Tidak dapat menemukan satupun lagu pembuka dari playlist "${result.name}" di YouTube.`)],
     });
     return;
   }
 
-  const firstSpotifyId = firstItem.uri?.split(":").pop() || `${firstItem.artist} - ${firstItem.title}`;
+  const firstSpotifyId = initialItem.uri?.split(":").pop() || `${initialItem.artist} - ${initialItem.title}`;
   lastPlayedSpotifyTracks.set(interaction.guildId!, {
     spotifyId: firstSpotifyId,
-    title: firstItem.title,
-    artist: firstItem.artist,
-    durationMs: firstItem.durationMs || 0,
-    youtubeId: firstTrack.info.identifier,
+    title: initialItem.title,
+    artist: initialItem.artist,
+    durationMs: initialItem.durationMs || 0,
+    youtubeId: initialTrack.info.identifier,
   });
 
   if (playNext) {
-    player.queue.tracks.unshift(firstTrack);
+    player.queue.tracks.unshift(initialTrack);
   } else {
-    player.queue.add(firstTrack);
+    player.queue.add(initialTrack);
   }
 
   if (!player.playing && !player.paused) {
@@ -219,11 +231,11 @@ async function handleSpotifyInput(
   }
 
   await interaction.editReply({
-    embeds: [createPlaylistAddedEmbed(result.name, result.tracks.length, firstTrack, result.isTruncated)],
+    embeds: [createPlaylistAddedEmbed(result.name, result.tracks.length, initialTrack, result.isTruncated)],
   });
 
-  // 2. Resolve remaining tracks in the background
-  const remaining = result.tracks.slice(1);
+  // 2. Resolve lagu-lagu lainnya di background (semua lagu selain lagu pembuka yang sudah diputar)
+  const remaining = result.tracks.filter((_, idx) => idx !== initialItemIndex);
   (async () => {
     let addedCount = 0;
     for (const item of remaining) {
