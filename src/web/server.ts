@@ -175,8 +175,10 @@ export function startDashboardServer(
 ): http.Server {
   const server = http.createServer(async (req, res) => {
     // Keamanan: Validasi bahwa akses hanya dari localhost atau jaringan lokal (LAN)
+    // Di lingkungan cloud seperti Render, proxy internal meneruskan request dari user
+    const isCloudEnv = process.env.RENDER === "true" || process.env.NODE_ENV === "production";
     const remoteIp = req.socket.remoteAddress || "";
-    if (!isLanOrLocalhost(remoteIp)) {
+    if (!isCloudEnv && !isLanOrLocalhost(remoteIp)) {
       res.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" });
       res.end("403 Forbidden: Dashboard hanya dapat diakses melalui Localhost atau Jaringan Lokal (LAN).");
       return;
@@ -345,8 +347,14 @@ export function startDashboardServer(
     // Static Assets: GET /assets/*
     if (pathname.startsWith("/assets/") && req.method === "GET") {
       const filename = path.basename(pathname);
-      const filePath = path.join(process.cwd(), "assets", filename);
-      if (fs.existsSync(filePath)) {
+      const possiblePaths = [
+        path.join(process.cwd(), "assets", filename),
+        path.resolve(__dirname, "../../assets", filename),
+        path.resolve(__dirname, "../assets", filename),
+        path.resolve(__dirname, "assets", filename),
+      ];
+      const filePath = possiblePaths.find((p) => fs.existsSync(p));
+      if (filePath) {
         const ext = path.extname(filename).toLowerCase();
         const mimeTypes: Record<string, string> = {
           ".jpg": "image/jpeg",
@@ -362,6 +370,10 @@ export function startDashboardServer(
           "Cache-Control": "public, max-age=86400",
         });
         fs.createReadStream(filePath).pipe(res);
+        return;
+      } else {
+        res.writeHead(404, { "Content-Type": "text/plain" });
+        res.end("Asset not found");
         return;
       }
     }
